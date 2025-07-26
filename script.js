@@ -17,7 +17,7 @@ animateElements.forEach(el => observer.observe(el));
 // <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
 // IMPORTANT: Replace with your actual API key
-const API_KEY = 'AIzaSyCN1nonb6387eKzJtB4qLhHOL9GJaWrRQg'; // Placeholder - user should replace with their key
+const API_KEY = 'AIzaSyCG7KClF3paXEZF3xV_h2A'; // Placeholder - user should replace with their key
 
 // --- Global Variable for Conversation History ---
 // Initialize with your system instructions.
@@ -83,7 +83,6 @@ function displayError(message) {
     
     // Scroll to make the START of the error message visible, only if not initial load
     if (!isInitialChatLoad) {
-        // Use smooth scroll to the bottom of the chat container
         geminiResponseEl.scrollTo({ top: geminiResponseEl.scrollHeight, behavior: 'smooth' });
     }
 }
@@ -109,18 +108,15 @@ function appendMessageToChat(role, text) {
 // The main function to send prompt to Gemini
 async function askGemini() {
     const userInput = userInputEl.value.trim();
-    // if (!userInput) {
-    //     displayError("Please enter a question.");
-    //     return;
-    // }
+    if (!userInput) { // Re-enabled this check
+        displayError("Please enter a question.");
+        return;
+    }
 
     showLoading(); // Show loading indicator and disable elements
 
-    // --- Add user's new message to history before sending ---
-    // Make a copy of conversationHistory to send, so we can add the user's message
-    // before showing it, but the main history remains consistent.
-    const currentPayloadHistory = [...conversationHistory]; // Create a shallow copy
-    currentPayloadHistory.push({ role: "user", parts: [{ text: userInput }] });
+    // --- CRITICAL CHANGE: Add user's message to the GLOBAL conversationHistory immediately ---
+    conversationHistory.push({ role: "user", parts: [{ text: userInput }] });
     
     appendMessageToChat('user', userInput); // Display user message immediately
 
@@ -128,9 +124,9 @@ async function askGemini() {
 
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
     
-    // --- IMPORTANT: Send the entire conversation history as the payload ---
+    // --- Now send the GLOBAL conversationHistory, which includes the latest user input ---
     const payload = {
-        contents: currentPayloadHistory, // Send the history including the new user message
+        contents: conversationHistory, // Send the updated global history
         // Optional: safety settings directly in the fetch call if you prefer
         safetySettings: [
             { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
@@ -162,7 +158,7 @@ async function askGemini() {
         if (data && data.candidates && data.candidates.length > 0) {
             const geminiResponseText = data.candidates[0].content.parts[0].text;
             
-            // --- Add model's response to history (for next turn) ---
+            // --- Add model's response to GLOBAL conversationHistory ---
             conversationHistory.push({ role: "model", parts: [{ text: geminiResponseText }] });
 
             // --- Display formatted response ---
@@ -407,7 +403,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (story.trim().length > 0) {
                 localStorage.setItem('yourStory', story);
                 savedMessageEl.textContent = 'Your story is saved safely in your browser.';
-                savedMessageEl.style.display = 'block';
+                savedMessageEl.style.display = 'flex'; // Use flex for centering content
                 savedMessageEl.style.color = ''; // Reset color
                 savedMessageEl.style.backgroundColor = '#d4edda'; // Success background
                 savedMessageEl.style.borderColor = '#c3e6cb'; // Success border
@@ -416,7 +412,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }, 2500);
             } else {
                 savedMessageEl.textContent = 'Please write something before saving.';
-                savedMessageEl.style.display = 'block';
+                savedMessageEl.style.display = 'flex'; // Use flex for centering content
                 savedMessageEl.style.color = '#856404'; // Warning color
                 savedMessageEl.style.backgroundColor = '#fff3cd'; // Warning background
                 savedMessageEl.style.borderColor = '#ffeeba'; // Warning border
@@ -574,7 +570,7 @@ document.addEventListener('DOMContentLoaded', () => {
         navLinks.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', (e) => {
                 const targetId = link.getAttribute('href');
-                // If the link is just '#', scroll to the top of the window
+                // If the link is just '#', scroll to the very top
                 if (targetId === '#') {
                     e.preventDefault(); // Prevent default anchor jump
                     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -599,7 +595,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Smooth scroll for nav links (if not already handled by CSS scroll-behavior)
-    // This block is now redundant for internal links handled above, but kept for external links or
+    // This block is now mostly redundant for internal links handled above, but kept for external links or
     // if other parts of the site rely on it. The above block handles internal anchors more specifically.
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         // Only attach if not already handled by the primary nav-links listener

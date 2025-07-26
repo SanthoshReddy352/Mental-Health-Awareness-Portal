@@ -6,21 +6,73 @@
     <title>Mental Health Quiz</title>
     <!-- Link to your existing styles.css -->
     <link rel="stylesheet" href="styles.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 </head>
 <body>
-    <!-- The main container for the quiz content -->
-    <!-- The quizLogic.js will populate this div with questions, options, and navigation -->
-    <div class="quiz" id="quiz">
-        <div id="quiz-container" class="quiz-card">
-            <!-- Initial content before JavaScript loads the quiz -->
-            <h2 class="text-2xl font-bold mb-4 text-gray-800">Loading Quiz...</h2>
-            <p class="text-gray-600">Please wait while the quiz content loads.</p>
+    <!-- Navigation Bar - Simplified for quiz page, but consistent look -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <img src="logo1.png" alt="Mindful Portal Logo" class="logo-img" />
+            <span class="nav-logo-text">Mindful Portal</span>
+        </div>
+        <input type="checkbox" id="nav-toggle" class="nav-toggle">
+        <label for="nav-toggle" class="nav-toggle-label">
+            <span></span>
+            <span></span>
+            <span></span>
+        </label>
+        <ul class="nav-links">
+            <li>
+                <a href="index.html">
+                    <i class="fas fa-home"></i> 
+                    <div>Home</div>
+                </a>
+            </li>
+            <li>
+                <a href="index3.html#info">
+                    <i class="fas fa-info-circle"></i> 
+                    <div>Facts</div>
+                </a>
+            </li>
+            <li>
+                <a href="index3.html#graph-section-1">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <div>Stats</div>
+                </a>
+            </li>
+            <li>
+                <a href="index3.html#stories">
+                    <i class="fa-solid fa-book-open"></i>
+                    <div>Stories</div>
+                </a>
+            </li>
+            <li>
+                <a href="index3.html#gemini-chat-section">
+                    <i class="fa-solid fa-robot"></i>
+                    <div>AI Chat</div>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main container for the quiz content -->
+    <div class="quiz-page-container">
+        <div class="quiz-header">
+            <h1>Mental Health Check-in Quiz</h1>
+            <p>Answer these questions to get a brief overview of your current mental well-being. Your responses are private and not stored.</p>
+        </div>
+
+        <div class="quiz" id="quiz">
+            <div id="quiz-container" class="quiz-card">
+                <!-- Quiz content will be loaded here by quizLogic.js -->
+                <h2 class="text-2xl font-bold mb-4 text-gray-800">Loading Quiz...</h2>
+                <p class="text-gray-600">Please wait while the quiz content loads.</p>
+            </div>
         </div>
     </div>
     
-
     <!-- Link to your new quiz logic file -->
-    <!-- The type="module" is important for modern JavaScript modules -->
     <script type="module" src="quizLogic.js"></script>
 </body>
 </html>

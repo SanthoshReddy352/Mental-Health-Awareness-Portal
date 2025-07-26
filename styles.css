@@ -77,6 +77,11 @@ body.no-scroll {
     transition: color 0.18s;
     padding: 20px 0; /* Make clickable area larger */
     display: block; /* For padding to work */
+    /* Desktop: align items for icon and text if present */
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Small gap between icon and text */
+    justify-content: center; /* Center content horizontally on desktop */
 }
 
 .nav-links a:hover,
@@ -85,8 +90,7 @@ body.no-scroll {
 }
 
 .nav-links i { /* Icons within nav links */
-    display: flex;
-    transform: translateX(8px); /* Adjust icon position */
+    /* Removed transform: translateX here for desktop, will use flex gap */
     font-size: medium;
 }
 
@@ -577,25 +581,39 @@ footer a:hover {
 
 
 /* Stats Section (Charts) */
+#graph-section-1 { /* Added a new ID for the main graph section wrapper */
+    padding: 60px 5%; /* Consistent padding with other sections */
+    text-align: center;
+    background-color: #f9f9f9; /* Light background for this section */
+}
+
+#graph-section-1 h2 {
+    color: #254E70;
+    margin-bottom: 40px;
+    font-size: 2.2em;
+}
+
 .stats-container {
     display: flex;
-    justify-content: space-around; /* Space evenly */
-    gap: 20px;
-    padding: 0 10%; /* Match other sections' padding */
-    margin: 32px auto 0 auto;
+    justify-content: center; /* Center the two chart sections */
+    align-items: flex-start; /* Align items to the top if they have different heights */
+    gap: 30px; /* Increased gap between the two charts */
     flex-wrap: wrap; /* Allow wrapping on smaller screens */
+    max-width: 1100px; /* Limit overall width for better layout */
+    margin: 0 auto; /* Center the container itself */
 }
+
 .stats-section {
-    flex: 1 1 45%; /* Adjusted flex basis for two columns */
+    flex: 1 1 48%; /* Adjusted flex basis for two columns with a small gap */
     background: #fff;
     border-radius: 12px;
     box-shadow: 0 4px 16px rgba(50,50,80,0.08);
     padding: 28px;
     text-align: center;
-    min-width: 300px; /* Ensure charts have enough space */
+    min-width: 350px; /* Ensure charts have enough space even when wrapping */
     box-sizing: border-box; /* Include padding in width calculation */
 }
-.stats-section h2 {
+.stats-section h3 { /* Changed h2 to h3 for chart titles */
     color: #254e70;
     margin-bottom: 20px;
     font-size: 1.8em; /* Slightly smaller for charts */
@@ -856,68 +874,132 @@ canvas {
 }
 
 /* Quiz Page Specific Styles (for index2.html, but also used by summary in index3.html) */
-#quiz { /* This ID is for the main container in index2.html */
-    margin: 40px auto;
-    max-width: 500px;
+.quiz-page-container { /* New container for the entire quiz page content */
+    max-width: 800px; /* Max width for the quiz content */
+    margin: 40px auto; /* Center it and add vertical space */
     padding: 0 20px; /* Add padding for smaller screens */
+}
+
+.quiz-header { /* Style for the new quiz header */
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 20px;
+    background: linear-gradient(90deg, #c2e9fb 0%, #a1c4fd 100%); /* Light gradient background */
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    color: #254E70;
+}
+
+.quiz-header h1 {
+    font-size: 2.5em;
+    margin-bottom: 15px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.05); /* Subtle text shadow */
+}
+
+.quiz-header p {
+    font-size: 1.1em;
+    line-height: 1.6;
+    color: #1C3852;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+#quiz { /* This ID is for the main container in index2.html */
+    /* Removed max-width and padding as quiz-page-container handles it */
+    margin: 0 auto; /* Center within its parent */
 }
 
 .quiz-card { /* Main card style for quiz questions in index2.html */
     background: #fff;
-    box-shadow: 0 4px 16px rgba(50,50,80,0.07);
-    border-radius: 10px;
-    padding: 28px 28px 16px 28px;
-    margin-bottom: 24px;
+    box-shadow: 0 8px 20px rgba(50,50,80,0.1); /* Stronger shadow */
+    border-radius: 15px; /* More rounded corners */
+    padding: 35px; /* Increased padding */
+    margin-bottom: 30px; /* More space below card */
     text-align: center;
+    border: 1px solid #e0e0e0; /* Subtle border */
+    position: relative; /* For question number positioning */
+}
+
+.question-number { /* New style for question number */
+    position: absolute;
+    top: -15px; /* Position above the card */
+    left: 50%;
+    transform: translateX(-50%);
+    background: #3E93AA; /* Highlight color */
+    color: #fff;
+    padding: 8px 15px;
+    border-radius: 20px; /* Pill shape */
+    font-weight: bold;
+    font-size: 1.1em;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    z-index: 1; /* Ensure it's above the card */
+}
+
+.quiz-card h2 { /* Question text */
+    font-size: 1.8em;
+    color: #254E70;
+    margin-bottom: 30px; /* More space below question */
+    line-height: 1.4;
 }
 
 .quiz-options {
     display: grid;
     margin: 20px 0;
-    gap: 10px; /* Space between buttons */
+    gap: 15px; /* More space between buttons */
 }
 
 .quiz-options button {
     background: #e4eaf2;
     color: #222;
     border: none;
-    padding: 12px 0;
-    border-radius: 6px;
-    font-size: 1.02em;
+    padding: 15px 20px; /* Larger buttons */
+    border-radius: 10px; /* More rounded */
+    font-size: 1.1em; /* Larger font */
     cursor: pointer;
-    transition: background 0.15s, transform 0.1s;
+    transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08); /* Subtle button shadow */
 }
 .quiz-options button.selected, .quiz-options button:hover {
-    background: #A7C7E7;
+    background: #A7C7E7; /* Lighter blue on hover/selected */
     color: #222;
-    transform: translateY(-1px);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15); /* More pronounced shadow on hover/selected */
 }
+.quiz-options button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
 .quiz-nav-buttons {
     display: flex;
     justify-content: space-between;
-    margin-top: 12px;
+    margin-top: 30px; /* More space above navigation buttons */
 }
 .quiz-nav-buttons button {
-    padding: 10px 18px;
-    border-radius: 6px;
+    padding: 12px 25px; /* Larger nav buttons */
+    border-radius: 8px; /* More rounded */
     border: none;
     cursor: pointer;
     background: #254E70;
     color: white;
-    transition: background 0.2s;
+    font-size: 1.1em;
+    transition: background 0.2s, transform 0.1s;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
 }
 .quiz-nav-buttons button:hover:not(:disabled) {
     background: #3E93AA;
+    transform: translateY(-1px);
 }
 .quiz-nav-buttons button:disabled {
-    opacity: 0.6;
+    opacity: 0.5;
     cursor: not-allowed;
+    box-shadow: none;
 }
 .quiz-submit {
-    background: #47B39C;
+    background: #47B39C; /* Green for submit */
 }
 .quiz-submit:hover:not(:disabled) {
-    background: #388e7b;
+    background: #388e7b; /* Darker green on hover */
 }
 
 /* Quiz Summary Styles (for index3.html) */
@@ -1174,13 +1256,15 @@ canvas {
 
     .nav-links li {
         margin: 0;
-        text-align: center;
+        text-align: left; /* Align text to the left for mobile menu items */
         width: 100%;
     }
 
     .nav-links a {
-        padding: 12px 0;
+        padding: 12px 20px; /* More padding for mobile clickable area */
         border-bottom: 1px solid rgba(255,255,255,0.1); /* Separator */
+        justify-content: flex-start; /* Align icon and text to the start */
+        gap: 15px; /* Increased gap between icon and text for mobile */
     }
     .nav-links li:last-child a {
         border-bottom: none;
@@ -1301,5 +1385,42 @@ canvas {
     .write-story button {
         padding: 12px 30px;
         font-size: 1.1em;
+    }
+
+    /* Quiz specific responsive adjustments */
+    .quiz-page-container {
+        padding: 0 15px; /* Adjust padding for smaller screens */
+    }
+    .quiz-header {
+        padding: 15px;
+        margin-bottom: 30px;
+    }
+    .quiz-header h1 {
+        font-size: 2em;
+    }
+    .quiz-header p {
+        font-size: 0.95em;
+    }
+    .quiz-card {
+        padding: 25px;
+        margin-bottom: 20px;
+    }
+    .quiz-card h2 {
+        font-size: 1.5em;
+        margin-bottom: 20px;
+    }
+    .quiz-options button {
+        padding: 12px 15px;
+        font-size: 1em;
+    }
+    .quiz-nav-buttons {
+        flex-direction: column; /* Stack buttons vertically */
+        gap: 10px; /* Space between stacked buttons */
+        margin-top: 20px;
+    }
+    .quiz-nav-buttons button {
+        width: 100%; /* Full width buttons */
+        padding: 12px 20px;
+        font-size: 1em;
     }
 }
