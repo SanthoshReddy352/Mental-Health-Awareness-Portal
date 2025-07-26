@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mental Health Awareness Portal</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script type="module">
+    import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
+    window.GoogleGenerativeAI = GoogleGenerativeAI;
+  </script>
+
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-left">
+        <img src="images/logo.jpg" alt="Mindful Portal Logo" class="logo-img" />
+        <span class="nav-logo-text">Mindful Portal</span>
+    </div>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle">
+    <label for="nav-toggle" class="nav-toggle-label">
+        <span></span>
+        <span></span>
+        <span></span>
+    </label>
+    <ul class="nav-links">
+        <li><a href="#hero">Home</a></li>
+        <li><a href="#hero">Quiz</a></li>
+        <li><a href="#info">Information</a></li>
+        <li><a href="#graph-section-1">Statistics</a></li>
+        <li><a href="#stories">Stories</a></li>
+    </ul>
+  </nav>
+
+
+  <section id="hero" class="animate">
+    <h1>Take charge of your mental well-being</h1>
+    <p>
+      Ready to reflect on your mental health? <strong>Take our quick quiz</strong>
+      to learn more about yourself.
+    </p>
+    <button id="startQuizBtn">Get Started</button>
+  </section>
+
+  <section id="quiz" style="display: none;"></section>
+
+  <section id="info" class="animate">
+    <h2>Common Mental Health Disorders</h2>
+    <div class="disorders-container">
+      <div class="disorder-card">
+        <h3>Schizophrenia</h3>
+        <p>A serious mental disorder affecting how a person thinks, feels, and behaves.</p>
+        <a target="_blank" href="https://en.wikipedia.org/wiki/Schizophrenia">Read more</a>
+      </div>
+      <div class="disorder-card">
+        <h3>PTSD</h3>
+        <p>A condition triggered by experiencing or witnessing a traumatic event.</p>
+        <a target="_blank" href="https://en.wikipedia.org/wiki/Posttraumatic_stress_disorder">Read more</a>
+      </div>
+      <div class="disorder-card">
+        <h3>Eating Disorders</h3>
+        <p>Disorders characterized by abnormal or disturbed eating habits.</p>
+        <a target="_blank" href="https://en.wikipedia.org/wiki/Eating_disorder">Read more</a>
+      </div>
+      <div class="disorder-card">
+        <h3>OCD</h3>
+        <p>A disorder where people have recurring, unwanted thoughts and behaviors.</p>
+        <a target="_blank" href="https://en.wikipedia.org/wiki/Obsessive–compulsive_disorder">Read more</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Graph sections start here -->
+  <div class="stats-container">
+    <section id="graph-section-2" class="stats-section animate">
+        <h2>Mental Disorder Prevalence (Global, All Ages)</h2>
+        <canvas id="prevalenceChart" width="600" height="400"></canvas>
+    </section>
+    <section id="graph-section-1" class="stats-section animate">
+        <h2>Mental Health Diagnoses Per Year</h2>
+        <canvas id="diagnosisChart" width="800" height="400"></canvas>
+    </section>
+  </div>
+
+  <!-- Graph sections end here -->
+
+  <section id="gemini-chat-section" class="ai-chat-section">
+    <h2>Ask Gemini About Mental Health</h2>
+    <div id="gemini-chat-box">
+      <textarea id="gemini-input" placeholder="Type your question here..." rows="2"></textarea>
+      <button onclick="askGemini()">Ask Gemini</button>
+    </div>
+    <div id="gemini-response"></div>
+    <small style="color:#b44747;display:block;margin-top:8px;">
+      Note: Gemini is an AI, not a medical professional. For urgent help, contact qualified services.
+    </small>
+  </section>
+
+
+  <section id="stories" class="animate">
+    <h2>Inspirational Stories</h2>
+    <div class="story-list">
+      <div class="story-card">
+        <p>"I struggled with anxiety for years, but seeking help changed my life."</p>
+        <span>- Anonymous</span>
+      </div>
+      <div class="story-card">
+        <p>"Opening up about my OCD helped me build stronger relationships."</p>
+        <span>- Anonymous</span>
+      </div>
+      <div class="story-card">
+        <p>"Recovering from an eating disorder gave me the power to love myself again."</p>
+        <span>- Anonymous</span>
+      </div>
+    </div>
+    <div class="write-story">
+      <h3>Your Story</h3>
+      <textarea id="yourStory" placeholder="Write your story here—only you can see this."></textarea>
+      <button id="saveStoryBtn">Save Story</button>
+      <div id="savedMessage" style="display:none;">Your story is saved safely in your browser.</div>
+    </div>
+  </section>
+
+  <footer>
+    <div>
+      <img src="images/logo.jpg" alt="Mindful Portal Logo" class="logo-img-footer"/>
+      <span>Quick Links: </span>
+      <a target="_blank" href="https://en.wikipedia.org/wiki/Schizophrenia">Schizophrenia</a> |
+      <a target="_blank" href="https://en.wikipedia.org/wiki/Posttraumatic_stress_disorder">PTSD</a> |
+      <a target="_blank" href="https://en.wikipedia.org/wiki/Eating_disorder">Eating Disorders</a> |
+      <a target="_blank" href="https://en.wikipedia.org/wiki/Obsessive–compulsive_disorder">OCD</a>
+    </div>
+    <small>&copy; 2025 Mindful Portal</small>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

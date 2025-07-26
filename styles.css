@@ -1,0 +1,821 @@
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 60px; /* Adjusted to account for sticky navbar */
+}
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #F4F6F7;
+    color: #222;
+}
+
+/* Navbar styles */
+.navbar {
+    background: #254E70;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 5%;
+    height: 60px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Added subtle shadow */
+}
+
+.nav-left {
+    display: flex;
+    align-items: center;
+}
+
+.nav-logo-text {
+    font-weight: bold;
+    font-size: 1.3em;
+    letter-spacing: 1px;
+    margin-left: 10px;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-links li {
+    margin-left: 24px;
+}
+
+.nav-links a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.06em;
+    transition: color 0.18s;
+    padding: 20px 0; /* Make clickable area larger */
+    display: block; /* For padding to work */
+}
+
+.nav-links a:hover,
+.nav-links a:focus {
+    color: #A7C7E7;
+}
+
+.nav-toggle,
+.nav-toggle-label {
+    display: none; /* Hidden by default for desktop */
+}
+
+.logo-img {
+    height: 36px;
+    vertical-align: middle;
+    margin-right: 10px;
+}
+
+/* Hero Section */
+#hero {
+    padding: 60px 10%; /* Increased padding */
+    background: #A7C7E7;
+    text-align: center;
+    color: #254E70; /* Text color for hero */
+}
+#hero h1 {
+    font-size: 2.8em;
+    margin-bottom: 20px;
+}
+#hero p {
+    font-size: 1.2em;
+    max-width: 700px;
+    margin: 0 auto 30px auto;
+}
+#hero button {
+    background: #254E70;
+    color: #fff;
+    border: none;
+    padding: 12px 35px; /* Slightly larger button */
+    font-size: 1.3em; /* Slightly larger font */
+    margin-top: 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+#hero button:hover {
+    background: #3E93AA;
+    transform: translateY(-2px);
+}
+#hero button:active {
+    transform: translateY(0);
+}
+
+.retake { /* Shared button style */
+    background: #254E70;
+    color: #fff;
+    border: none;
+    padding: 10px 30px;
+    font-size: 1.2em;
+    margin-top: 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.retake:hover {
+    background: #3E93AA;
+}
+
+/* Quiz Section */
+#quiz {
+    margin: 40px auto;
+    max-width: 500px;
+    padding: 0 20px; /* Add padding for smaller screens */
+}
+
+.quiz-card, .summary-card {
+    background: #fff;
+    box-shadow: 0 4px 16px rgba(50,50,80,0.07);
+    border-radius: 10px;
+    padding: 28px 28px 16px 28px;
+    margin-bottom: 24px;
+    text-align: center;
+}
+
+.quiz-options {
+    display: grid;
+    margin: 20px 0;
+    gap: 10px; /* Space between buttons */
+}
+
+.quiz-options button {
+    background: #e4eaf2;
+    color: #222;
+    border: none;
+    padding: 12px 0;
+    border-radius: 6px;
+    font-size: 1.02em;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+}
+.quiz-options button.selected, .quiz-options button:hover {
+    background: #A7C7E7;
+    color: #222;
+    transform: translateY(-1px);
+}
+.quiz-nav-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 12px;
+}
+.quiz-nav-buttons button {
+    padding: 10px 18px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    background: #254E70;
+    color: white;
+    transition: background 0.2s;
+}
+.quiz-nav-buttons button:hover:not(:disabled) {
+    background: #3E93AA;
+}
+.quiz-nav-buttons button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+.quiz-submit {
+    background: #47B39C;
+}
+.quiz-submit:hover:not(:disabled) {
+    background: #388e7b;
+}
+
+.summary-card h3 {
+    margin-top: 0;
+    color: #254E70;
+}
+.summary-status.good {
+    color: #47B39C;
+    font-weight: bold;
+    font-size: 1.3em;
+    margin-bottom: 10px;
+}
+.summary-status.average {
+    color: #e1a23b;
+    font-weight: bold;
+    font-size: 1.3em;
+    margin-bottom: 10px;
+}
+.summary-status.bad {
+    color: #B3404A;
+    font-weight: bold;
+    font-size: 1.3em;
+    margin-bottom: 10px;
+}
+.summary-status.medium {
+    color: #3E93AA;
+    font-weight: bold;
+    font-size: 1.3em;
+    margin-bottom: 10px;
+}
+#summary-table {
+    width: 100%;
+    margin: 18px auto 15px auto;
+    border-collapse: collapse;
+    max-width: 400px; /* Limit table width */
+}
+#summary-table th, #summary-table td {
+    border: 1px solid #ccc;
+    padding: 8px 10px;
+    font-weight: normal;
+    text-align: center;
+}
+#summary-table th {
+    background: #e4eaf2;
+    color: #254E70;
+}
+
+/* Info Section */
+#info {
+    padding: 40px 10%;
+    text-align: center;
+}
+#info h2 {
+    color: #254E70;
+    margin-bottom: 30px;
+    font-size: 2.2em;
+}
+
+.disorders-container {
+    display: flex;
+    justify-content: center; /* Center cards */
+    gap: 20px;
+    flex-wrap: wrap;
+}
+.disorder-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 18px;
+    flex: 1 1 200px; /* Allow cards to grow and shrink, min-width 200px */
+    max-width: 250px; /* Limit max width for larger screens */
+    margin: 8px; /* Consistent margin for wrapping */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    transition: transform 0.2s ease;
+}
+.disorder-card:hover {
+    transform: translateY(-5px);
+}
+.disorder-card h3 {
+    margin-top: 0;
+    color: #254E70;
+    font-size: 1.4em;
+    margin-bottom: 10px;
+}
+.disorder-card p {
+    font-size: 0.95em;
+    line-height: 1.5;
+    flex-grow: 1; /* Make paragraphs take available space */
+}
+.disorder-card a {
+    margin-top: auto; /* Push link to bottom */
+    color: #3E93AA;
+    text-decoration: none;
+    font-weight: bold;
+    display: inline-block; /* For padding */
+    padding-top: 10px; /* Space above link */
+}
+.disorder-card a:hover {
+    text-decoration: underline;
+}
+
+/* Stories Section */
+#stories {
+    padding: 40px 10%;
+    text-align: center;
+}
+#stories h2 {
+    color: #254E70;
+    margin-bottom: 30px;
+    font-size: 2.2em;
+}
+.story-list {
+    display: flex;
+    justify-content: center; /* Center story cards */
+    gap: 18px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+.story-card {
+    background: #fff;
+    border-radius: 8px;
+    padding: 16px 22px;
+    min-width: 250px; /* Slightly larger min-width */
+    max-width: 300px; /* Max width for consistency */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    flex: 1 1 250px;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    transition: transform 0.2s ease;
+}
+.story-card:hover {
+    transform: translateY(-5px);
+}
+.story-card p {
+    margin: 0 0 8px 0;
+    font-style: italic;
+    color: #555;
+    flex-grow: 1;
+}
+.story-card span {
+    font-weight: bold;
+    color: #254E70;
+    text-align: right;
+    display: block;
+    margin-top: 10px;
+}
+.write-story {
+    margin-top: 20px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(50,50,80,0.07);
+    padding: 24px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.write-story h3 {
+    color: #254E70;
+    margin-bottom: 15px;
+}
+.write-story textarea {
+    width: calc(100% - 22px); /* Account for padding */
+    min-height: 100px; /* Larger textarea */
+    max-width: 600px;
+    border-radius: 8px;
+    border: 1px solid #aaa;
+    padding: 10px;
+    font-size: 1em;
+    resize: vertical; /* Allow vertical resize */
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+}
+.write-story button {
+    margin-top: 15px; /* More space */
+    padding: 10px 25px; /* Larger button */
+    background: #254E70;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+}
+.write-story button:hover {
+    background: #3E93AA;
+    transform: translateY(-1px);
+}
+#savedMessage {
+    margin-top: 10px;
+    padding: 8px 15px;
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+    border-radius: 5px;
+    display: none;
+}
+
+/* Footer */
+footer {
+    background: #254E70;
+    color: #fff;
+    text-align: center;
+    padding: 18px 0 8px 0;
+    margin-top: 35px;
+    font-size: 0.9em;
+}
+footer a {
+    color: #A7C7E7;
+    text-decoration: none; /* No underline by default */
+    margin: 0 5px;
+}
+footer a:hover {
+    text-decoration: underline;
+}
+.logo-img-footer {
+    height: 32px;
+    vertical-align: middle;
+    margin-bottom: -8px;
+    margin-right: 8px;
+}
+
+/* Stats Section (Charts) */
+.stats-container {
+    display: flex;
+    justify-content: space-around; /* Space evenly */
+    gap: 20px;
+    padding: 0 10%; /* Match other sections' padding */
+    margin: 32px auto 0 auto;
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+}
+.stats-section {
+    flex: 1 1 45%; /* Adjusted flex basis for two columns */
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(50,50,80,0.08);
+    padding: 28px;
+    text-align: center;
+    min-width: 300px; /* Ensure charts have enough space */
+    box-sizing: border-box; /* Include padding in width calculation */
+}
+.stats-section h2 {
+    color: #254e70;
+    margin-bottom: 20px;
+    font-size: 1.8em; /* Slightly smaller for charts */
+}
+canvas {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Animation classes */
+.animate {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 1s ease-out;
+}
+
+.animate.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* AI Chat Section - Specific Styling */
+.ai-chat-section {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(50,50,80,0.07);
+    margin: 32px auto 0 auto;
+    padding: 24px;
+    max-width: 660px;
+    text-align: center;
+    display: flex; /* Make it a flex container */
+    flex-direction: column; /* Stack children vertically */
+}
+.ai-chat-section h2 {
+    color: #254E70;
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 2em;
+}
+
+#gemini-chat-box {
+    display: flex;
+    gap: 10px; /* More space between input and button */
+    justify-content: center;
+    align-items: flex-end; /* Align input and button bottoms */
+    margin-bottom: 15px; /* Space between input section and chat display */
+}
+#gemini-input {
+    flex-grow: 1; /* Allow textarea to fill space */
+    width: auto; /* Override fixed width */
+    padding: 10px 12px; /* More padding */
+    font-size: 1em; /* Adjusted font size */
+    border-radius: 8px; /* More rounded corners */
+    border: 1px solid #ccc;
+    resize: vertical; /* Allow vertical resizing */
+    min-height: 40px; /* Minimum height for better appearance */
+    max-height: 120px; /* Prevent it from getting too large */
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+#gemini-input:focus {
+    border-color: #3E93AA;
+    box-shadow: 0 0 0 3px rgba(62, 147, 170, 0.2);
+    outline: none;
+}
+
+#gemini-chat-box button {
+    background: #254E70;
+    color: #fff;
+    border: none;
+    padding: 10px 22px; /* More padding for button */
+    border-radius: 8px; /* More rounded corners */
+    font-size: 1.1em; /* Larger font */
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+}
+#gemini-chat-box button:hover {
+    background: #3E93AA;
+    transform: translateY(-1px);
+}
+#gemini-chat-box button:active {
+    background: #1C3852;
+    transform: translateY(0);
+}
+#gemini-chat-box button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+
+/* Chat response container (the scrollable chat window) */
+#gemini-response {
+    margin-top: 15px; /* Space from input area */
+    text-align: left;
+    min-height: 150px; /* Minimum height for chat window */
+    max-height: 400px; /* Maximum height before scrolling */
+    overflow-y: auto; /* Make it scrollable */
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 15px; /* Padding inside the chat window */
+    background-color: #f9f9f9;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column; /* Stack messages */
+    gap: 10px; /* Space between chat bubbles */
+}
+
+/* Individual Chat Message Styling */
+.chat-message {
+    padding: 10px 15px;
+    border-radius: 18px; /* Rounded pill shape */
+    line-height: 1.6;
+    max-width: 85%; /* Keep messages from spanning full width */
+    word-wrap: break-word; /* Ensure long words break */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08); /* Subtle shadow for bubbles */
+    clear: both; /* Ensures new messages don't float next to previous */
+}
+
+.user-message {
+    background-color: #A7C7E7; /* User bubble color */
+    color: #222;
+    align-self: flex-end; /* Push user messages to the right */
+    margin-left: auto; /* Ensure it stays right-aligned */
+    border-bottom-right-radius: 5px; /* Flatten corner towards source */
+}
+
+.model-message {
+    background-color: #E4EAF2; /* AI bubble color */
+    color: #333;
+    align-self: flex-start; /* Push AI messages to the left */
+    margin-right: auto; /* Ensure it stays left-aligned */
+    border-bottom-left-radius: 5px; /* Flatten corner towards source */
+}
+
+.error-message {
+    background-color: #ffe0e0; /* Light red for errors */
+    color: #cc0000;
+    border: 1px solid #ffb3b3;
+    text-align: center;
+    align-self: center; /* Center error messages */
+    font-weight: bold;
+    border-radius: 8px; /* Less rounded for errors */
+}
+
+/* Markdown elements within messages (important for AI response formatting) */
+.model-message p:last-child {
+    margin-bottom: 0; /* Remove extra margin from last paragraph in a message */
+}
+
+.model-message h1, .model-message h2, .model-message h3, .model-message h4, .model-message h5, .model-message h6 {
+    color: #254E70; /* Darker color for headings within AI responses */
+    margin-top: 15px; 
+    margin-bottom: 10px;
+    padding-bottom: 0;
+    border-bottom: none; /* No underline for headings in chat bubbles */
+    font-size: 1.3em; 
+    line-height: 1.3;
+}
+.model-message h2 { font-size: 1.2em; }
+.model-message h3 { font-size: 1.1em; }
+.model-message h4 { font-size: 1em; }
+
+
+.model-message ul, .model-message ol {
+    margin-left: 20px;
+    margin-bottom: 10px;
+    padding: 0;
+}
+
+.model-message li {
+    margin-bottom: 5px;
+}
+
+.model-message pre { /* Code blocks */
+    background-color: #f0f0f0;
+    padding: 10px;
+    border-radius: 6px;
+    overflow-x: auto; /* Enable horizontal scroll for long code lines */
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 0.85em;
+    border: 1px solid #e0e0e0;
+    line-height: 1.3;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    white-space: pre-wrap; /* Ensure preformatted text wraps */
+    word-wrap: break-word; /* Break long words in preformatted blocks */
+}
+
+.model-message code { /* Inline code */
+    font-family: 'Consolas', 'Monaco', monospace;
+    background-color: #e6e6e6;
+    padding: 1px 4px;
+    border-radius: 3px;
+    color: #c7254e; /* Distinct color for inline code */
+    font-size: 0.9em;
+}
+
+/* Loading Indicator Styling */
+.loading-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 15px;
+    color: #254E70;
+    font-weight: bold;
+    flex-shrink: 0; 
+}
+
+.loading-indicator span {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #254E70;
+    margin: 0 5px;
+    animation: bounce 0.6s infinite alternate;
+}
+
+.loading-indicator span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.loading-indicator span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes bounce {
+    from {
+        transform: translateY(0);
+    }
+    to {
+        transform: translateY(-8px);
+    }
+}
+
+/* Error Display Styling */
+.error-display {
+    margin-top: 15px;
+    padding: 12px;
+    background-color: #ffe0e0; /* Light red background */
+    border: 1px solid #ffb3b3; /* Red border */
+    border-radius: 8px;
+    color: #cc0000; /* Darker red text */
+    font-weight: bold;
+    flex-shrink: 0; 
+    text-align: center;
+}
+
+.error-display #errorMessage {
+    word-break: break-all; /* Break long error messages */
+}
+
+/* Utility Class */
+.hidden {
+    display: none !important;
+}
+
+/* .number-animation td{
+    
+} */
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .nav-toggle-label {
+        display: block;
+        cursor: pointer;
+        order: 1; /* Puts hamburger on the left */
+        padding: 10px;
+        position: relative;
+        z-index: 11; /* Above nav links when open */
+    }
+
+    .nav-toggle-label span {
+        display: block;
+        width: 25px;
+        height: 3px;
+        background-color: #fff;
+        margin: 5px 0;
+        transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    .nav-links {
+        position: absolute;
+        top: 60px; /* Below navbar */
+        left: 0;
+        width: 100%;
+        background: #254E70;
+        flex-direction: column;
+        height: 0;
+        overflow: hidden;
+        transition: height 0.3s ease, padding 0.3s ease;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        z-index: 9;
+    }
+    
+    .nav-links.active {
+        height: auto; /* Adjust based on content */
+        max-height: 300px; /* Max height to prevent overflow issues */
+        padding-bottom: 20px; /* Add some padding at the bottom when open */
+    }
+
+    .nav-links li {
+        margin: 0;
+        text-align: center;
+        width: 100%;
+    }
+
+    .nav-links a {
+        padding: 12px 0;
+        border-bottom: 1px solid rgba(255,255,255,0.1); /* Separator */
+    }
+    .nav-links li:last-child a {
+        border-bottom: none;
+    }
+
+    .nav-toggle:checked ~ .nav-links {
+        height: auto;
+        max-height: 300px; /* Or specific height */
+        padding-bottom: 20px;
+    }
+
+    /* Hamburger animation */
+    .nav-toggle:checked + .nav-toggle-label span:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+    }
+    .nav-toggle:checked + .nav-toggle-label span:nth-child(2) {
+        opacity: 0;
+    }
+    .nav-toggle:checked + .nav-toggle-label span:nth-child(3) {
+        transform: translateY(-8px) rotate(-45deg);
+    }
+
+    .navbar {
+        justify-content: space-between; /* Space out logo and hamburger */
+    }
+    .nav-left {
+        order: 2; /* Put logo on the right of hamburger */
+    }
+
+
+    #hero {
+        padding: 40px 5%;
+    }
+    #hero h1 {
+        font-size: 2em;
+    }
+    #hero p {
+        font-size: 1em;
+    }
+
+    #info, #stories {
+        padding: 30px 5%;
+    }
+    .disorder-card, .story-card {
+        flex: 1 1 100%; /* Stack cards vertically on small screens */
+        max-width: 100%;
+        margin: 8px 0;
+    }
+    .stats-container {
+        flex-direction: column;
+        gap: 20px;
+        padding: 0 5%;
+    }
+    .stats-section {
+        flex: 1 1 auto;
+        min-width: unset; /* Remove min-width to allow full collapse */
+        padding: 20px;
+    }
+    canvas {
+        width: 100% !important;
+        height: 250px !important; /* Adjust height for smaller screens */
+    }
+    .ai-chat-section {
+        padding: 20px;
+        margin: 20px auto;
+    }
+    #gemini-chat-box {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+    #gemini-input {
+        width: auto;
+    }
+    #gemini-chat-box button {
+        width: 100%; /* Full width button */
+    }
+}
