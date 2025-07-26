@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mental Health Awareness Portal</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script type="module">
+    import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
+    window.GoogleGenerativeAI = GoogleGenerativeAI;
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-left">
+        <img src="images/logo1.png" alt="Mindful Portal Logo" class="logo-img" />
+        <span class="nav-logo-text">Mindful Portal</span>
+    </div>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle">
+    <label for="nav-toggle" class="nav-toggle-label">
+        <span></span>
+        <span></span>
+        <span></span>
+    </label>
+    <ul class="nav-links">
+        <li>
+          <a href="#"> <!-- Changed href to # to go to the very top -->
+            <i class="fas fa-home"></i> 
+            <div>Home</div>
+          </a>
+        </li>
+        <li>
+          <!-- Update this link to point to index2.html for the quiz -->
+          <a href="index2.html">
+            <i class="fas fa-tasks"></i> 
+            <div>Quiz</div>
+          </a>
+        </li>
+        <li>
+          <a href="#info">
+            <i class="fas fa-info-circle"></i> 
+            <div>Facts</div>
+          </a>
+        </li>
+        <li>
+          <a href="#graph-section-1">
+            <i class="fa-solid fa-chart-line"></i>
+            <div>Stats</div>
+            </a>
+        </li>
+        <li>
+          <a href="#stories">
+            <i class="fa-solid fa-book-open"></i>
+            <div>Stroies</div>
+          </a>
+        </li>
+        <li>
+          <a href="#gemini-chat-section"> <!-- New AI Chat link -->
+            <i class="fa-solid fa-robot"></i>
+            <div>AI Chat</div>
+          </a>
+        </li>
+    </ul>
+  </nav>
+
+  <!-- New container for quiz summary - placed right after the navbar -->
+  <div id="quiz-summary-container" class="summary-section-wrapper"></div>
+
+  
+
+  <section id="info" class="animate">
+    <h2>Common Mental Health Disorders</h2>
+    <div class="disorders-container">
+      <div class="disorder-card">
+        <img src="https://media.gettyimages.com/id/487729535/photo/lost-and-alone.jpg?s=612x612&w=0&k=20&c=CIiCGszVkkcz3-LUhV0gzn7tEbqe_zv7YLsW7P3NV3c="  style="border-radius: 5px;" alt="Schizophrenia">
+        <h3>Schizophrenia</h3>
+        <p>A serious mental disorder affecting how a person thinks, feels, and behaves.</p>
+        <a target="_blank" href="https://en.wikipedia.org/wiki/Schizophrenia">Read more</a>
+      </div>
+      <div class="disorder-card">
+        <img src="https://media.gettyimages.com/id/1330747633/photo/depressed-soldier-sitting-on-sofa-with-his-family.jpg?s=612x612&w=0&k=20&c=bz2hONOyTbWLNVZer6B-H1BHWg2WTbZAX_mOoEatcSY="  style="border-radius: 5px;" alt="PSTD">
+        <h3>PTSD</h3>
+        <p>A condition triggered by experiencing or witnessing a traumatic event.</p>
+        <a target="_blank" href="https://en.wikipedia.org/wiki/Posttraumatic_stress_disorder">Read more</a>
+      </div>
+      <div class="disorder-card">
+        <img src="https://media.gettyimages.com/id/157639274/photo/dangerous-behaviour.jpg?s=612x612&w=0&k=20&c=fjzeW0XAjY9J_yUWsaszY7SPh1vnjh9TmQUxCHfMtiY="  style="border-radius: 5px;" alt="Eating Disorders">
+        <h3>Eating Disorders</h3>
+        <p>Disorders characterized by abnormal or disturbed eating habits.</p>
+        <a target="_blank" href="https://en.wikipedia.org/wiki/Eating_disorder">Read more</a>
+      </div>
+      <div class="disorder-card">
+        <img src="https://media.gettyimages.com/id/77103424/photo/man-cutting-grass-with-scissors.jpg?s=612x612&w=0&k=20&c=KQuzprmGurKpeQkEaSR9CYRnzo3utCRMQ-_gMB1LB24="  style="border-radius: 5px;" alt="OCD">
+        <h3>OCD</h3>
+        <p>A disorder where people have recurring, unwanted thoughts and behaviors.</p>
+        <a target="_blank" href="https://en.wikipedia.org/wiki/Obsessive–compulsive_disorder">Read more</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Graph sections start here -->
+  <div class="stats-container">
+    <section id="graph-section-2" class="stats-section animate">
+        <h2>Mental Disorder Prevalence (Global, All Ages)</h2>
+        <canvas id="prevalenceChart" width="600" height="400"></canvas>
+    </section>
+    <section id="graph-section-1" class="stats-section animate">
+        <h2>Mental Health Diagnoses Per Year</h2>
+        <canvas id="diagnosisChart" width="800" height="400"></canvas>
+    </section>
+  </div>
+
+  <!-- Graph sections end here -->
+
+  <section id="gemini-chat-section" class="ai-chat-section">
+    <h2>Ask Gemini About Mental Health</h2>
+    <div id="gemini-chat-box">
+      <textarea id="gemini-input" placeholder="Type your question here..." rows="2"></textarea>
+      <button onclick="askGemini()">Ask Gemini</button>
+    </div>
+    <div id="gemini-response"></div>
+    <small style="color:#b44747;display:block;margin-top:8px;">
+      Note: Gemini is an AI, not a medical professional. For urgent help, contact qualified services.
+    </small>
+  </section>
+
+
+  <section id="stories" class="animate">
+    <h2>Inspirational Stories</h2>
+    <div class="story-list">
+      <!-- Story cards will be dynamically loaded by script.js -->
+    </div>
+    <div class="write-story">
+      <h3>Share Your Journey</h3>
+      <p class="story-intro-text">Your experiences can inspire and help others. Share your story of resilience, growth, or a moment of breakthrough. This space is private, and your story will only be saved in your browser.</p>
+      <textarea id="yourStory" placeholder="Start writing your story here. What challenges did you face? How did you overcome them? What advice would you give to others?"></textarea>
+      <button id="saveStoryBtn">Save My Story</button>
+      <div id="savedMessage" class="saved-message" style="display:none;">Your story is saved safely in your browser.</div>
+    </div>
+  </section>
+
+  <footer>
+    <div>
+      <img src="images/logo1.png" alt="Mindful Portal Logo" class="logo-img-footer"/>
+      <span>Quick Links: </span>
+      <a target="_blank" href="https://en.wikipedia.org/wiki/Schizophrenia">Schizophrenia</a> |
+      <a target="_blank" href="https://en.wikipedia.org/wiki/Posttraumatic_stress_disorder">PTSD</a> |
+      <a target="_blank" href="https://en.wikipedia.org/wiki/Eating_disorder">Eating Disorders</a> |
+      <a target="_blank" href="https://en.wikipedia.org/wiki/Obsessive–compulsive_disorder">OCD</a>
+    </div>
+    <small>&copy; 2025 Mindful Portal</small>
+  </footer>
+
+  <!-- Modal Structure -->
+  <div id="storyModal" class="modal-overlay hidden">
+    <div class="modal-content">
+      <span class="close-button">&times;</span>
+      <h3 id="modalStoryTitle"></h3>
+      <p id="modalStoryContent"></p>
+      <span id="modalStoryAuthor"></span>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <!-- Script for index.html to redirect to index2.html on Get Started button click -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const getStartedButton = document.getElementById('getStartedBtn');
+        if (getStartedButton) {
+            getStartedButton.addEventListener('click', function() {
+                window.location.href = 'index2.html';
+            });
+        }
+    });
+  </script>
+</body>
+</html>

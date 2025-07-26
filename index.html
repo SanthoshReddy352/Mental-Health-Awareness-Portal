@@ -1,24 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Mental Health Awareness Portal</title>
-  <link rel="stylesheet" href="styles.css" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-  <script type="module">
-    import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
-    window.GoogleGenerativeAI = GoogleGenerativeAI;
-  </script>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Mindful Portal - Your Journey to Well-being</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 </head>
 <body>
+  <!-- Navigation Bar - Consistent with index3.html structure -->
   <nav class="navbar">
     <div class="nav-left">
-        <img src="images/logo.jpg" alt="Mindful Portal Logo" class="logo-img" />
+        <img src="images/logo1.png" alt="Mindful Portal Logo" class="logo-img" />
         <span class="nav-logo-text">Mindful Portal</span>
     </div>
+    <!-- Mobile toggle elements (hidden on desktop by CSS) -->
     <input type="checkbox" id="nav-toggle" class="nav-toggle">
     <label for="nav-toggle" class="nav-toggle-label">
         <span></span>
@@ -26,115 +22,130 @@
         <span></span>
     </label>
     <ul class="nav-links">
-        <li><a href="#hero">Home</a></li>
-        <li><a href="#hero">Quiz</a></li>
-        <li><a href="#info">Information</a></li>
-        <li><a href="#graph-section-1">Statistics</a></li>
-        <li><a href="#stories">Stories</a></li>
+        <li>
+          <a href="#hero">
+            <i class="fas fa-home"></i> 
+            <div>Home</div>
+          </a>
+        </li>
+        <li>
+          <a href="index2.html">
+            <i class="fas fa-tasks"></i> 
+            <div>Quiz</div>
+          </a>
+        </li>
+        <li>
+          <a href="index3.html#info"> <!-- Link to Facts section on index3.html -->
+            <i class="fas fa-info-circle"></i> 
+            <div>Facts</div>
+          </a>
+        </li>
+        <li>
+          <a href="index3.html#graph-section-1"> <!-- New link to Stats section on index3.html -->
+            <i class="fa-solid fa-chart-line"></i>
+            <div>Stats</div>
+          </a>
+        </li>
+        <li>
+          <a href="index3.html#stories"> <!-- Link to Stories section on index3.html -->
+            <i class="fa-solid fa-book-open"></i>
+            <div>Stories</div>
+          </a>
+        </li>
+        <li>
+          <a href="index3.html#gemini-chat-section"> <!-- Link to AI Chat section on index3.html -->
+            <i class="fa-solid fa-robot"></i>
+            <div>AI Chat</div>
+          </a>
+        </li>
     </ul>
   </nav>
-
-
-  <section id="hero" class="animate">
-    <h1>Take charge of your mental well-being</h1>
-    <p>
-      Ready to reflect on your mental health? <strong>Take our quick quiz</strong>
-      to learn more about yourself.
-    </p>
-    <button id="startQuizBtn">Get Started</button>
+  
+  <!-- Hero Section -->
+  <section id="hero">
+    <div class="hero-content">
+      <h1>Empower Your Mind, Enrich Your Life</h1>
+      <p>Discover resources, gain insights, and find a supportive community for your mental well-being journey.</p>
+      <div class="hero-buttons">
+        <button id="getStartedBtn" class="main-cta">Take Our Mental Wellness Quiz</button>
+        <a href="index3.html" class="secondary-cta-link"><button class="secondary-cta">Explore All Resources</button></a>
+      </div>
+    </div>
   </section>
-
-  <section id="quiz" style="display: none;"></section>
-
-  <section id="info" class="animate">
-    <h2>Common Mental Health Disorders</h2>
-    <div class="disorders-container">
-      <div class="disorder-card">
-        <h3>Schizophrenia</h3>
-        <p>A serious mental disorder affecting how a person thinks, feels, and behaves.</p>
-        <a target="_blank" href="https://en.wikipedia.org/wiki/Schizophrenia">Read more</a>
-      </div>
-      <div class="disorder-card">
-        <h3>PTSD</h3>
-        <p>A condition triggered by experiencing or witnessing a traumatic event.</p>
-        <a target="_blank" href="https://en.wikipedia.org/wiki/Posttraumatic_stress_disorder">Read more</a>
-      </div>
-      <div class="disorder-card">
-        <h3>Eating Disorders</h3>
-        <p>Disorders characterized by abnormal or disturbed eating habits.</p>
-        <a target="_blank" href="https://en.wikipedia.org/wiki/Eating_disorder">Read more</a>
-      </div>
-      <div class="disorder-card">
-        <h3>OCD</h3>
-        <p>A disorder where people have recurring, unwanted thoughts and behaviors.</p>
-        <a target="_blank" href="https://en.wikipedia.org/wiki/Obsessive–compulsive_disorder">Read more</a>
+  
+  <!-- New Section: Why Mental Health Matters -->
+  <section id="why-mental-health" class="animate">
+    <div class="why-mental-health-content">
+      <h2>Why Mental Health Matters</h2>
+      <p>Mental health is just as important as physical health. It affects how we think, feel, and act, and influences how we handle stress, relate to others, and make choices. Prioritizing your mental well-being leads to a more balanced, fulfilling, and resilient life.</p>
+      <div class="why-points">
+        <div class="point-card">
+          <i class="fas fa-brain"></i>
+          <h3>Understand Yourself</h3>
+          <p>Gain insights into your thoughts and emotions.</p>
+        </div>
+        <div class="point-card">
+          <i class="fas fa-hand-holding-heart"></i>
+          <h3>Build Resilience</h3>
+          <p>Develop stronger coping mechanisms for life's challenges.</p>
+        </div>
+        <div class="point-card">
+          <i class="fas fa-users"></i>
+          <h3>Connect & Thrive</h3>
+          <p>Foster healthier relationships and a sense of community.</p>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- Graph sections start here -->
-  <div class="stats-container">
-    <section id="graph-section-2" class="stats-section animate">
-        <h2>Mental Disorder Prevalence (Global, All Ages)</h2>
-        <canvas id="prevalenceChart" width="600" height="400"></canvas>
-    </section>
-    <section id="graph-section-1" class="stats-section animate">
-        <h2>Mental Health Diagnoses Per Year</h2>
-        <canvas id="diagnosisChart" width="800" height="400"></canvas>
-    </section>
-  </div>
-
-  <!-- Graph sections end here -->
-
-  <section id="gemini-chat-section" class="ai-chat-section">
-    <h2>Ask Gemini About Mental Health</h2>
-    <div id="gemini-chat-box">
-      <textarea id="gemini-input" placeholder="Type your question here..." rows="2"></textarea>
-      <button onclick="askGemini()">Ask Gemini</button>
-    </div>
-    <div id="gemini-response"></div>
-    <small style="color:#b44747;display:block;margin-top:8px;">
-      Note: Gemini is an AI, not a medical professional. For urgent help, contact qualified services.
-    </small>
-  </section>
-
-
-  <section id="stories" class="animate">
-    <h2>Inspirational Stories</h2>
-    <div class="story-list">
-      <div class="story-card">
-        <p>"I struggled with anxiety for years, but seeking help changed my life."</p>
-        <span>- Anonymous</span>
-      </div>
-      <div class="story-card">
-        <p>"Opening up about my OCD helped me build stronger relationships."</p>
-        <span>- Anonymous</span>
-      </div>
-      <div class="story-card">
-        <p>"Recovering from an eating disorder gave me the power to love myself again."</p>
-        <span>- Anonymous</span>
-      </div>
-    </div>
-    <div class="write-story">
-      <h3>Your Story</h3>
-      <textarea id="yourStory" placeholder="Write your story here—only you can see this."></textarea>
-      <button id="saveStoryBtn">Save Story</button>
-      <div id="savedMessage" style="display:none;">Your story is saved safely in your browser.</div>
+  <!-- Section: Quick Links to Key Areas (simplified) -->
+  <section id="quick-explore" class="animate">
+    <h2>Quick Explore</h2>
+    <div class="quick-links-grid">
+      <a href="index3.html#info" class="explore-card">
+        <i class="fas fa-lightbulb"></i>
+        <h3>Learn About Disorders</h3>
+        <p>Understand common mental health conditions.</p>
+      </a>
+      <a href="index3.html#stories" class="explore-card">
+        <i class="fas fa-comments"></i>
+        <h3>Read Inspiring Stories</h3>
+        <p>Find hope and connection through shared experiences.</p>
+      </a>
+      <a href="index3.html#gemini-chat-section" class="explore-card">
+        <i class="fas fa-robot"></i>
+        <h3>Chat with AI Assistant</h3>
+        <p>Get general information and support from Gemini.</p>
+      </a>
     </div>
   </section>
-
+  
+  <!-- Footer -->
   <footer>
-    <div>
-      <img src="images/logo.jpg" alt="Mindful Portal Logo" class="logo-img-footer"/>
-      <span>Quick Links: </span>
-      <a target="_blank" href="https://en.wikipedia.org/wiki/Schizophrenia">Schizophrenia</a> |
-      <a target="_blank" href="https://en.wikipedia.org/wiki/Posttraumatic_stress_disorder">PTSD</a> |
-      <a target="_blank" href="https://en.wikipedia.org/wiki/Eating_disorder">Eating Disorders</a> |
-      <a target="_blank" href="https://en.wikipedia.org/wiki/Obsessive–compulsive_disorder">OCD</a>
+    <div class="footer-container">
+      <img src="images/logo1.png" alt="Website Logo" class="logo-img-footer">
+      <div class="footer-links">
+        <a href="https://en.wikipedia.org/wiki/Anxiety_disorder" target="_blank">Anxiety Disorders</a>
+        <a href="https://en.wikipedia.org/wiki/Major_depressive_disorder" target="_blank">Depression</a>
+        <a href="https://en.wikipedia.org/wiki/Bipolar_disorder" target="_blank">Bipolar Disorder</a>
+        <a href="https://en.wikipedia.org/wiki/Borderline_personality_disorder" target="_blank">Borderline Personality Disorder</a>
+        <a href="https://en.wikipedia.org/wiki/Dissociative_disorder" target="_blank">Dissociative Disorders</a>
+      </div>
     </div>
     <small>&copy; 2025 Mindful Portal</small>
   </footer>
 
   <script src="script.js"></script>
+  <!-- Script for index.html to redirect to index2.html on Get Started button click -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const getStartedButton = document.getElementById('getStartedBtn');
+        if (getStartedButton) {
+            getStartedButton.addEventListener('click', function() {
+                window.location.href = 'index2.html';
+            });
+        }
+    });
+  </script>
 </body>
 </html>

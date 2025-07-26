@@ -1,8 +1,23 @@
+const animateElements = document.querySelectorAll('.animate');
+
+const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('show');
+            // observer.unobserve(entry.target); // animate once if desired, keep observing for re-appear
+        } else {
+            entry.target.classList.remove('show'); // Remove 'show' if it scrolls out of view
+        }
+    });
+}, { threshold: 0.1 });
+
+animateElements.forEach(el => observer.observe(el));
+
 // This script assumes 'marked' is loaded globally from your HTML:
 // <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
 // IMPORTANT: Replace with your actual API key
-const API_KEY = 'AIzaSyCG7KClF3paXEZfOMRoaKV-BVRH3xV_h2A';
+const API_KEY = 'AIzaSyCG7KClF3paXEZF3xV_h2A'; // Placeholder - user should replace with their key
 
 // --- Global Variable for Conversation History ---
 // Initialize with your system instructions.
@@ -36,6 +51,8 @@ errorDisplay.innerHTML = '<p>An error occurred: <span id="errorMessage"></span><
 const errorMessageSpan = errorDisplay.querySelector('#errorMessage');
 geminiResponseEl.parentNode.insertBefore(errorDisplay, loadingIndicator.nextSibling); // Insert after loadingIndicator
 
+// Flag to control initial scroll behavior for chat
+let isInitialChatLoad = true;
 
 // Helper functions for UI
 function showLoading() {
@@ -49,7 +66,7 @@ function hideLoading() {
     loadingIndicator.classList.add('hidden');
     sendButton.disabled = false; // Re-enable the button
     userInputEl.disabled = false; // Re-enable input
-    userInputEl.focus(); // Keep focus on the input field
+    // Removed: userInputEl.focus(); // This line caused the unwanted scroll back to the input area
 }
 
 // Function to display an error (appends error message to chat area)
@@ -64,8 +81,11 @@ function displayError(message) {
     errorMessageElement.innerHTML = `Error: ${message}`;
     geminiResponseEl.appendChild(errorMessageElement);
     
-    // Scroll to make the START of the error message visible
-    errorMessageElement.scrollIntoView({ behavior: 'smooth', block: 'start' }); 
+    // Scroll to make the START of the error message visible, only if not initial load
+    if (!isInitialChatLoad) {
+        // Use smooth scroll to the bottom of the chat container
+        geminiResponseEl.scrollTo({ top: geminiResponseEl.scrollHeight, behavior: 'smooth' });
+    }
 }
 
 // Function to append a message (user or model) to the chat display
@@ -79,9 +99,11 @@ function appendMessageToChat(role, text) {
     messageContainer.innerHTML = contentHtml;
     geminiResponseEl.appendChild(messageContainer);
 
-    // Scroll to the START of the newly added message element.
-    // This makes sure the new message is visible, leaving older content above.
-    messageContainer.scrollIntoView({ behavior: 'smooth', block: 'start' }); 
+    // Scroll to the very bottom of the chat container to show the latest message
+    // This ensures the input area remains visible or easily accessible below the chat.
+    if (!isInitialChatLoad) {
+        geminiResponseEl.scrollTo({ top: geminiResponseEl.scrollHeight, behavior: 'smooth' });
+    }
 }
 
 // The main function to send prompt to Gemini
@@ -186,455 +208,356 @@ document.addEventListener('DOMContentLoaded', () => {
             conversationHistory[conversationHistory.length - 1].role,
             conversationHistory[conversationHistory.length - 1].parts[0].text
         );
+        isInitialChatLoad = false; // Set flag to false after the initial message
     }
-});
 
+    // --- Quiz Summary Display Logic ---
+    const quizSummaryContainer = document.getElementById('quiz-summary-container');
+    const storedScores = sessionStorage.getItem('quizScores');
+    const storedMaxCategory = sessionStorage.getItem('quizMaxCategory');
 
-// ===========================================
-// EXISTING QUIZ, STORY, AND CHART JAVASCRIPT
-// (Copied directly from your provided script.js content)
-// ===========================================
+    if (storedScores && storedMaxCategory) {
+        const scores = JSON.parse(storedScores);
+        const maxCat = storedMaxCategory;
 
-// Quiz Data and Functionality
-const animateElements = document.querySelectorAll('.animate');
+        // Category labels, explanations, and suggestions (copied from quizLogic.js for display)
+        const categoryLabels = {
+            good: "Good Mental Health",
+            medium: "Medium Mental Health",
+            average: "Average Mental Health",
+            bad: "Needs Attention"
+        };
 
-const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('show');
-            // observer.unobserve(entry.target); // animate once if desired, keep observing for re-appear
-        } else {
-            entry.target.classList.remove('show'); // Remove 'show' if it scrolls out of view
+        const categoryExplanations = {
+            good: "You’re practicing healthy habits and coping strategies.",
+            medium: "You're doing well, but could benefit from extra self-care.",
+            average: "You face some challenges that would improve with more support or lifestyle changes.",
+            bad: "You may be struggling—many people feel this way at times."
+        };
+
+        const categorySuggestions = {
+            good: [
+                "Continue your positive routines (exercise, adequate sleep, and social activities).",
+                "Help others by sharing your strategies.",
+                "Stay mindful of any changes in your mood."
+            ],
+            medium: [
+                "Schedule downtime for self-care (relax, meditate, walk in nature).",
+                "Strengthen social connections—reach out to friends or loved ones.",
+                "Practice stress reduction (breathing exercises, creative hobbies)."
+            ],
+            average: [
+                "Set small, achievable goals to foster a sense of accomplishment.",
+                "Seek help from friends, family, or online communities.",
+                "Try journaling or mindfulness meditation.",
+                "Consider establishing healthy routines (sleep, meals, exercise)."
+            ],
+            bad: [
+                "Reach out to a mental health professional or counselor.",
+                "Talk to someone you trust about how you are feeling—don't isolate yourself.",
+                "Practice self-compassion and avoid self-criticism.",
+                "Remember: seeking help is a sign of strength."
+            ]
+        };
+
+        const commonAdvice = [
+            "If you feel overwhelmed, it's always okay to speak to a mental health professional.",
+            "Engage in hobbies or activities you enjoy.",
+            "Prioritize consistent sleep and balanced meals.",
+            "Avoid excessive screen time and news overload, especially if it increases stress."
+        ];
+
+        let summaryHtml = `
+            <div class="summary-card">
+                <h3>Your Mental Health Quiz Summary</h3>
+                <table id="summary-table">
+                    <tr>
+                        <th>Good</th>
+                        <th>Medium</th>
+                        <th>Average</th>
+                        <th>Needs Attention</th>
+                    </tr>
+                    <tr class='number-animation'>
+                        <td>${scores.good}</td>
+                        <td>${scores.medium}</td>
+                        <td>${scores.average}</td>
+                        <td>${scores.bad}</td>
+                    </tr>
+                </table>
+                <div class="summary-status ${maxCat}"><strong>${categoryLabels[maxCat]}</strong></div>
+                <p>${categoryExplanations[maxCat]}</p>
+                <ul>`;
+            categorySuggestions[maxCat].forEach(item => {
+                summaryHtml += `<li>${item}</li>`;
+            });
+            summaryHtml += `</ul>`;
+            summaryHtml += `<p><b>Remember:</b> Mental health is a <i>journey</i>; reaching out is a sign of strength!</p>`;
+            
+            // New section for General Tips, using the new class
+            summaryHtml += `<div class="general-tips-section">
+                <strong>General Tips:</strong><ul>`;
+            commonAdvice.forEach(item => {
+                summaryHtml += `<li>${item}</li>`;
+            });
+            summaryHtml += `</ul></div>
+                <button onclick="window.location.href='index2.html'" class="retake">Retake Quiz</button>
+            </div>`;
+        
+        quizSummaryContainer.innerHTML = summaryHtml;
+        quizSummaryContainer.style.display = 'block'; // Ensure the container is visible
+
+        // Clear sessionStorage so summary doesn't reappear on refresh
+        sessionStorage.removeItem('quizScores');
+        sessionStorage.removeItem('quizMaxCategory');
+
+        // Scroll to the summary section after it's displayed
+        quizSummaryContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    } else {
+        quizSummaryContainer.style.display = 'none'; // Hide if no summary data
+    }
+
+    // --- Story Data and Rendering ---
+    const storiesData = [
+        {
+            title: "Finding My Voice After Depression",
+            content: "For years, I battled with a silent depression that made even simple tasks feel impossible. The world felt muted, and I often found myself withdrawing from friends and family. It took immense courage, but I finally reached out for professional help. Therapy, combined with small, consistent steps like daily walks and journaling, slowly brought color back into my life. I learned to identify triggers, build coping mechanisms, and, most importantly, to be kind to myself. My journey isn't over, but I now have the tools and support system to navigate the ups and downs, and I'm living a life I once thought was out of reach.",
+            author: "Sarah M."
+        },
+        {
+            title: "Overcoming Anxiety: A Step-by-Step Triumph",
+            content: "My anxiety used to dictate every decision, from what I ate to where I went. Social situations were terrifying, and panic attacks were a regular occurrence. I felt trapped by my own mind. With the guidance of a cognitive-behavioral therapist, I began to challenge my anxious thoughts and gradually expose myself to situations I feared. It was incredibly difficult at first, but each small victory built my confidence. I discovered mindfulness techniques that helped ground me in moments of panic. Today, I can confidently say that I manage my anxiety; it no longer manages me. I've learned that courage isn't the absence of fear, but the triumph over it.",
+            author: "David R."
+        },
+        {
+            title: "Embracing My Bipolar Journey",
+            content: "Living with bipolar disorder felt like being on an unpredictable rollercoaster. The highs were exhilarating but fleeting, and the lows were crushing. For a long time, I tried to hide my struggles, fearing judgment. The turning point came when I found a psychiatrist who truly listened and a support group where I felt understood. Medication, consistent therapy, and a strong routine became my anchors. I've learned to recognize my mood patterns and communicate my needs to loved ones. My journey is ongoing, but I've found stability, self-acceptance, and a profound appreciation for every moment. My diagnosis doesn't define me; my resilience does.",
+            author: "Emily C."
+        },
+        {
+            title: "Healing from Trauma and Finding Peace",
+            content: "The echoes of past trauma haunted my days and nights, making it hard to trust, to feel safe, or to simply exist without a sense of dread. I carried a heavy burden, believing I was broken beyond repair. Through trauma-informed therapy, I slowly began to process my experiences in a safe and controlled environment. It was painful work, but with each session, a little more light entered. I learned to regulate my emotions, build healthy boundaries, and reclaim my narrative. Healing is not linear, but I've found a deep sense of peace and a renewed capacity for joy. My past is part of my story, but it no longer controls my future.",
+            author: "Alex P."
+        }
+    ];
+
+    const storyListContainer = document.querySelector('#stories .story-list');
+    const storyModal = document.getElementById('storyModal');
+    const modalStoryTitle = document.getElementById('modalStoryTitle');
+    const modalStoryContent = document.getElementById('modalStoryContent');
+    const modalStoryAuthor = document.getElementById('modalStoryAuthor');
+    const closeButton = document.querySelector('.modal-overlay .close-button');
+
+    // Function to truncate text
+    function truncateText(text, maxLength) {
+        if (text.length <= maxLength) {
+            return text;
+        }
+        return text.substring(0, maxLength) + '...';
+    }
+
+    // Render stories
+    storiesData.forEach(story => {
+        const storyCard = document.createElement('div');
+        storyCard.classList.add('story-card');
+        
+        const snippet = truncateText(story.content, 150); // Adjust snippet length as needed
+
+        storyCard.innerHTML = `
+            <h3>${story.title}</h3>
+            <p class="story-snippet">${snippet}</p>
+            <span class="story-author">${story.author}</span>
+            <button class="read-more-btn">Read More</button>
+        `;
+        
+        // Add event listener to the "Read More" button
+        const readMoreBtn = storyCard.querySelector('.read-more-btn');
+        readMoreBtn.addEventListener('click', () => {
+            modalStoryTitle.textContent = story.title;
+            modalStoryContent.textContent = story.content; // Full content
+            modalStoryAuthor.textContent = `- ${story.author}`;
+            storyModal.classList.remove('hidden');
+            document.body.classList.add('no-scroll'); // Prevent background scroll
+        });
+
+        storyListContainer.appendChild(storyCard);
+    });
+
+    // Close modal event listeners
+    closeButton.addEventListener('click', () => {
+        storyModal.classList.add('hidden');
+        document.body.classList.remove('no-scroll');
+    });
+
+    storyModal.addEventListener('click', (e) => {
+        if (e.target === storyModal) { // Close when clicking outside the modal content
+            storyModal.classList.add('hidden');
+            document.body.classList.remove('no-scroll');
         }
     });
-}, { threshold: 0.1 });
 
-animateElements.forEach(el => observer.observe(el));
-
-const quizData = [
-    {
-        question: "How often do you feel able to relax and unwind after a stressful day?",
-        options: [
-            { text: "Almost always", category: 'good' },
-            { text: "Sometimes", category: 'medium' },
-            { text: "Rarely", category: 'average' },
-            { text: "Never", category: 'bad' }
-        ]
-    },
-    {
-        question: "How would you describe your current sleep habits?",
-        options: [
-            { text: "Consistently restful", category: 'good' },
-            { text: "Fair, but sometimes troubled", category: 'medium' },
-            { text: "Inconsistent", category: 'average' },
-            { text: "Frequently poor", category: 'bad' }
-        ]
-    },
-    {
-        question: "When faced with challenges, you...",
-        options: [
-            { text: "Feel resilient and seek healthy coping", category: 'good' },
-            { text: "Try, but occasionally struggle", category: 'medium' },
-            { text: "Find it overwhelming sometimes", category: 'average' },
-            { text: "Feel helpless or hopeless", category: 'bad' }
-        ]
-    },
-    {
-        question: "How often do you seek help or talk to others when feeling low?",
-        options: [
-            { text: "Whenever I need to", category: 'good' },
-            { text: "Occasionally", category: 'medium' },
-            { text: "Rarely", category: 'average' },
-            { text: "Never", category: 'bad' }
-        ]
-    },
-    {
-        question: "How do you rate your self-esteem currently?",
-        options: [
-            { text: "High", category: 'good' },
-            { text: "Moderate", category: 'medium' },
-            { text: "Low at times", category: 'average' },
-            { text: "Very low", category: 'bad' }
-        ]
-    },
-    {
-        question: "How do you manage feelings of anxiety or worry?",
-        options: [
-            { text: "Practice calming and grounding techniques", category: 'good' },
-            { text: "Try to distract myself", category: 'medium' },
-            { text: "Struggle to manage", category: 'average' },
-            { text: "Feel overwhelmed often", category: 'bad' }
-        ]
-    },
-    {
-        question: "How strong is your social support network?",
-        options: [
-            { text: "Very strong", category: 'good' },
-            { text: "Moderate", category: 'medium' },
-            { text: "Weak", category: 'average' },
-            { text: "None", category: 'bad' }
-        ]
-    },
-    {
-        question: "How often do you enjoy activities or hobbies?",
-        options: [
-            { text: "Daily or almost daily", category: 'good' },
-            { text: "A few times a week", category: 'medium' },
-            { text: "Once or twice a month", category: 'average' },
-            { text: "Never", category: 'bad' }
-        ]
-    },
-    {
-        question: "How frequently do you experience persistent sadness?",
-        options: [
-            { text: "Very rarely", category: 'good' },
-            { text: "Sometimes", category: 'medium' },
-            { text: "Often", category: 'average' },
-            { text: "Almost all the time", category: 'bad' }
-        ]
-    },
-    {
-        question: "How often do you find it difficult to concentrate or focus?",
-        options: [
-            { text: "Rarely", category: 'good' },
-            { text: "Occasionally", category: 'medium' },
-            { text: "Frequently", category: 'average' },
-            { text: "Always", category: 'bad' }
-        ]
-    },
-    {
-        question: "How do you describe your appetite and eating patterns?",
-        options: [
-            { text: "Healthy and balanced", category: 'good' },
-            { text: "Mostly balanced", category: 'medium' },
-            { text: "Irregular at times", category: 'average' },
-            { text: "Very erratic or unhealthy", category: 'bad' }
-        ]
-    },
-    {
-        question: "In the last month, how often did you feel hopeless about your future?",
-        options: [
-            { text: "Not at all", category: 'good' },
-            { text: "A few times", category: 'medium' },
-            { text: "Several times", category: 'average' },
-            { text: "Very often or always", category: 'bad' }
-        ]
-    },
-    {
-        question: "How would you rate your current overall mental health?",
-        options: [
-            { text: "Excellent", category: 'good' },
-            { text: "Good", category: 'medium' },
-            { text: "Fair", category: 'average' },
-            { text: "Poor", category: 'bad' }
-        ]
-    }
-];
-
-const categoryLabels = {
-    good: "Good Mental Health",
-    medium: "Medium Mental Health",
-    average: "Average Mental Health",
-    bad: "Needs Attention"
-};
-
-const categoryExplanations = {
-    good: "You’re practicing healthy habits and coping strategies.",
-    medium: "You're doing well, but could benefit from extra self-care.",
-    average: "You face some challenges that would improve with more support or lifestyle changes.",
-    bad: "You may be struggling—many people feel this way at times."
-};
-
-const categorySuggestions = {
-    good: [
-        "Continue your positive routines (exercise, adequate sleep, and social activities).",
-        "Help others by sharing your strategies.",
-        "Stay mindful of any changes in your mood."
-    ],
-    medium: [
-        "Schedule downtime for self-care (relax, meditate, walk in nature).",
-        "Strengthen social connections—reach out to friends or loved ones.",
-        "Practice stress reduction (breathing exercises, creative hobbies)."
-    ],
-    average: [
-        "Set small, achievable goals to foster a sense of accomplishment.",
-        "Seek help from friends, family, or online communities.",
-        "Try journaling or mindfulness meditation.",
-        "Consider establishing healthy routines (sleep, meals, exercise)."
-    ],
-    bad: [
-        "Reach out to a mental health professional or counselor.",
-        "Talk to someone you trust about how you are feeling—don't isolate yourself.",
-        "Practice self-compassion and avoid self-criticism.",
-        "Remember: seeking help is a sign of strength."
-    ]
-};
-
-const commonAdvice = [
-    "If you feel overwhelmed, it's always okay to speak to a mental health professional.",
-    "Engage in hobbies or activities you enjoy.",
-    "Prioritize consistent sleep and balanced meals.",
-    "Avoid excessive screen time and news overload, especially if it increases stress."
-];
-
-const quizSection = document.getElementById('quiz');
-const startQuizBtn = document.getElementById('startQuizBtn');
-let quizState = { currentQ: 0, answers: Array(quizData.length).fill(null), scores: { good: 0, medium: 0, average: 0, bad: 0 } };
-
-function renderQuiz() {
-    quizSection.style.display = 'block';
-    document.getElementById('hero').style.display = 'none';
-    showQuizCard(quizState.currentQ);
-}
-
-function showQuizCard(index) {
-    const q = quizData[index];
-    let card = `<div class="quiz-card"><h3>Question ${index + 1} of ${quizData.length}</h3>
-        <p>${q.question}</p>
-        <div class="quiz-options">`;
-
-    q.options.forEach((opt, i) => {
-        const selected = quizState.answers[index] === i ? 'selected' : '';
-        card += `<button class="${selected}" onclick="selectOption(${index},${i})">${opt.text}</button>`;
-    });
-    card += `</div>
-        <div class="quiz-nav-buttons">
-            <button onclick="prevQuestion()" ${index === 0 ? 'disabled' : ''}>Previous</button>`;
-    if (index < quizData.length - 1) {
-        card += `<button onclick="nextQuestion()" ${quizState.answers[index] === null ? 'disabled' : ''}>Next</button>`;
-    } else {
-        card += `<button class="quiz-submit" onclick="submitQuiz()" ${quizState.answers[index] === null ? 'disabled' : ''}>Submit</button>`;
-    }
-    card += `</div></div>`;
-    quizSection.innerHTML = card;
-}
-
-window.selectOption = function(qIndex, oIndex) {
-    quizState.answers[qIndex] = oIndex;
-    showQuizCard(qIndex);
-};
-window.nextQuestion = function() {
-    if (quizState.currentQ < quizData.length - 1) {
-        quizState.currentQ++;
-        showQuizCard(quizState.currentQ);
-    }
-};
-window.prevQuestion = function() {
-    if (quizState.currentQ > 0) {
-        quizState.currentQ--;
-        showQuizCard(quizState.currentQ);
-    }
-};
-
-window.submitQuiz = function() {
-    quizState.scores = { good: 0, medium: 0, average: 0, bad: 0 };
-    quizState.answers.forEach((a, i) => {
-        const cat = quizData[i].options[a]?.category;
-        if (cat) quizState.scores[cat]++;
-    });
-    let maxCat = Object.keys(quizState.scores).reduce((a, b) => quizState.scores[a] >= quizState.scores[b] ? a : b);
-
-    let summaryHtml = `<div class="summary-card">
-        <h3>Your Mental Health Quiz Summary</h3>
-        <table id="summary-table">
-            <tr>
-                <th>Good</th>
-                <th>Mediu1m</th>
-                <th>Average</th>
-                <th>Needs Attention</th>
-            </tr>
-            <tr class='number-animation'>
-                <td>${quizState.scores.good}</td>
-                <td>${quizState.scores.medium}</td>
-                <td>${quizState.scores.average}</td>
-                <td>${quizState.scores.bad}</td>
-            </tr>
-        </table>
-        <div class="summary-status ${maxCat}"><strong>${categoryLabels[maxCat]}</strong></div>
-        <p>${categoryExplanations[maxCat]}</p>
-        <ul>`;
-    categorySuggestions[maxCat].forEach(item => {
-        summaryHtml += `<li>${item}</li>`;
-    });
-    summaryHtml += `</ul><p><b>Remember:</b> Mental health is a <i>journey</i>; reaching out is a sign of strength!</p>`;
-    summaryHtml += `<div style="margin-top:10px;border-top:1px solid #e4eaf2;padding-top:7px;">
-        <strong>General Tips:</strong><ul>`;
-    commonAdvice.forEach(item => {
-        summaryHtml += `<li>${item}</li>`;
-    });
-    summaryHtml += `</ul></div>
-        <button onclick="restartQuiz()" class=retake>Retake Quiz</button>
-    </div>`;
-    quizSection.innerHTML = summaryHtml;
-};
-
-window.restartQuiz = function() {
-    quizState = { currentQ: 0, answers: Array(quizData.length).fill(null), scores: { good: 0, medium: 0, average: 0, bad: 0 }};
-    showQuizCard(0);
-};
-
-// Event listener for Start Quiz Button
-startQuizBtn.addEventListener('click', renderQuiz);
-
-
-// Stories: Save and Load
-document.getElementById('saveStoryBtn').onclick = function() {
-    const story = document.getElementById('yourStory').value;
+    // Stories: Save and Load
+    const yourStoryTextarea = document.getElementById('yourStory');
+    const saveStoryBtn = document.getElementById('saveStoryBtn');
     const savedMessageEl = document.getElementById('savedMessage');
-    if (story.trim().length > 0) {
-        localStorage.setItem('yourStory', story);
-        savedMessageEl.textContent = 'Your story is saved safely in your browser.';
-        savedMessageEl.style.display = 'block';
-        savedMessageEl.style.color = ''; // Reset color
-        savedMessageEl.style.backgroundColor = '#d4edda'; // Success background
-        savedMessageEl.style.borderColor = '#c3e6cb'; // Success border
-        setTimeout(() => {
-            savedMessageEl.style.display = 'none';
-        }, 2500);
-    } else {
-        savedMessageEl.textContent = 'Please write something before saving.';
-        savedMessageEl.style.display = 'block';
-        savedMessageEl.style.color = '#856404'; // Warning color
-        savedMessageEl.style.backgroundColor = '#fff3cd'; // Warning background
-        savedMessageEl.style.borderColor = '#ffeeba'; // Warning border
-        setTimeout(() => {
-            savedMessageEl.style.display = 'none';
-            savedMessageEl.style.color = '';
-            savedMessageEl.style.backgroundColor = '';
-            savedMessageEl.style.borderColor = '';
-        }, 3000);
+
+    if (saveStoryBtn && yourStoryTextarea && savedMessageEl) {
+        saveStoryBtn.onclick = function() {
+            const story = yourStoryTextarea.value;
+            if (story.trim().length > 0) {
+                localStorage.setItem('yourStory', story);
+                savedMessageEl.textContent = 'Your story is saved safely in your browser.';
+                savedMessageEl.style.display = 'block';
+                savedMessageEl.style.color = ''; // Reset color
+                savedMessageEl.style.backgroundColor = '#d4edda'; // Success background
+                savedMessageEl.style.borderColor = '#c3e6cb'; // Success border
+                setTimeout(() => {
+                    savedMessageEl.style.display = 'none';
+                }, 2500);
+            } else {
+                savedMessageEl.textContent = 'Please write something before saving.';
+                savedMessageEl.style.display = 'block';
+                savedMessageEl.style.color = '#856404'; // Warning color
+                savedMessageEl.style.backgroundColor = '#fff3cd'; // Warning background
+                savedMessageEl.style.borderColor = '#ffeeba'; // Warning border
+                setTimeout(() => {
+                    savedMessageEl.style.display = 'none';
+                    savedMessageEl.style.color = '';
+                    savedMessageEl.style.backgroundColor = '';
+                    savedMessageEl.style.borderColor = '';
+                }, 3000);
+            }
+        };
+
+        const saved = localStorage.getItem('yourStory');
+        if (saved) {
+            yourStoryTextarea.value = saved;
+        }
     }
-};
 
-window.onload = function() {
-    const saved = localStorage.getItem('yourStory');
-    if (saved)
-        document.getElementById('yourStory').value = saved;
-};
 
-// Graph 1: Diagnoses Per Year from 'csvjson-1.json'
-fetch('csvjson (1).json')
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-    })
-    .then(data => {
-        const yearCounts = {};
-        data.forEach(entry => {
-            const year = entry["Year Diagnosed"];
-            if (year) yearCounts[year] = (yearCounts[year] || 0) + 1;
-        });
-        const sortedYears = Object.keys(yearCounts).sort((a, b) => a - b);
-        const counts = sortedYears.map(year => yearCounts[year]);
+    // Graph 1: Diagnoses Per Year from 'csvjson-1.json'
+    fetch('csvjson (1).json')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            const yearCounts = {};
+            data.forEach(entry => {
+                const year = entry["Year Diagnosed"];
+                if (year) yearCounts[year] = (yearCounts[year] || 0) + 1;
+            });
+            const sortedYears = Object.keys(yearCounts).sort((a, b) => a - b);
+            const counts = sortedYears.map(year => yearCounts[year]);
 
-        const ctx = document.getElementById('diagnosisChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: sortedYears,
-                datasets: [{
-                    label: 'Number of Diagnoses',
-                    data: counts,
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    fill: true,
-                    tension: 0.3,
-                    pointRadius: 4,
-                    pointBackgroundColor: 'rgba(75, 192, 192, 1)'
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Mental Health Diagnoses Over the Years',
-                        font: { size: 18 }
-                    }
+            const ctx = document.getElementById('diagnosisChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: sortedYears,
+                    datasets: [{
+                        label: 'Number of Diagnoses',
+                        data: counts,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        fill: true,
+                        tension: 0.3,
+                        pointRadius: 4,
+                        pointBackgroundColor: 'rgba(75, 192, 192, 1)'
+                    }]
                 },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        title: { display: true, text: 'Number of Diagnoses' }
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Mental Health Diagnoses Over the Years',
+                            font: { size: 18 }
+                        }
                     },
-                    x: {
-                        title: { display: true, text: 'Year' }
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: { display: true, text: 'Number of Diagnoses' }
+                        },
+                        x: {
+                            title: { display: true, text: 'Year' }
+                        }
                     }
                 }
+            });
+        })
+        .catch(error => { console.error('Error loading diagnoses JSON:', error); });
+
+    // Graph 2: Global Mental Disorder Prevalence by Gender from 'data.json'
+    fetch('data.json')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
-        });
-    })
-    .catch(error => { console.error('Error loading diagnoses JSON:', error); });
+            return response.json();
+        })
+        .then(data => {
+            const maleData = data.filter(entry => entry.sex === "Male");
+            const femaleData = data.filter(entry => entry.sex === "Female");
 
-// Graph 2: Global Mental Disorder Prevalence by Gender from 'data.json'
-fetch('data.json')
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-    })
-    .then(data => {
-        const maleData = data.filter(entry => entry.sex === "Male");
-        const femaleData = data.filter(entry => entry.sex === "Female");
+            const years = Array.from(new Set([...maleData, ...femaleData].map(d => d.year))).sort();
 
-        const years = Array.from(new Set([...maleData, ...femaleData].map(d => d.year))).sort();
+            const maleMap = new Map(maleData.map(d => [d.year, d.val * 100]));
+            const femaleMap = new Map(femaleData.map(d => [d.year, d.val * 100]));
 
-        const maleMap = new Map(maleData.map(d => [d.year, d.val * 100]));
-        const femaleMap = new Map(femaleData.map(d => [d.year, d.val * 100]));
+            const maleVals = years.map(y => maleMap.get(y) !== undefined ? maleMap.get(y).toFixed(2) : null);
+            const femaleVals = years.map(y => femaleMap.get(y) !== undefined ? femaleMap.get(y).toFixed(2) : null);
 
-        const maleVals = years.map(y => maleMap.get(y) !== undefined ? maleMap.get(y).toFixed(2) : null);
-        const femaleVals = years.map(y => femaleMap.get(y) !== undefined ? femaleMap.get(y).toFixed(2) : null);
-
-        const ctx = document.getElementById('prevalenceChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: years,
-                datasets: [
-                    {
-                        label: 'Male',
-                        data: maleVals,
-                        borderColor: 'blue',
-                        fill: false,
-                        tension: 0.3
-                    },
-                    {
-                        label: 'Female',
-                        data: femaleVals,
-                        borderColor: 'pink',
-                        fill: false,
-                        tension: 0.3
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Global Mental Disorder Prevalence by Gender'
-                    }
+            const ctx = document.getElementById('prevalenceChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: years,
+                    datasets: [
+                        {
+                            label: 'Male',
+                            data: maleVals,
+                            borderColor: 'blue',
+                            fill: false,
+                            tension: 0.3
+                        },
+                        {
+                            label: 'Female',
+                            data: femaleVals,
+                            borderColor: 'pink',
+                            fill: false,
+                            tension: 0.3
+                        }
+                    ]
                 },
-                scales: {
-                    y: {
-                        title: { display: true, text: 'Prevalence (%)' },
-                        beginAtZero: false
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Global Mental Disorder Prevalence by Gender'
+                        }
                     },
-                    x: {
-                        title: { display: true, text: 'Year' }
+                    scales: {
+                        y: {
+                            title: { display: true, text: 'Prevalence (%)' },
+                            beginAtZero: false
+                        },
+                        x: {
+                            title: { display: true, text: 'Year' }
+                        }
                     }
                 }
-            }
-        });
-    })
-    .catch(error => { console.error('Error loading prevalence JSON:', error); });
+            });
+        })
+        .catch(error => { console.error('Error loading prevalence JSON:', error); });
 
 
-// Mobile nav toggle
-document.addEventListener('DOMContentLoaded', () => { // Encapsulate to avoid re-running if already in onload
+    // Mobile nav toggle
     const navToggle = document.getElementById('nav-toggle');
     const navLinks = document.querySelector('.nav-links');
 
@@ -649,35 +572,54 @@ document.addEventListener('DOMContentLoaded', () => { // Encapsulate to avoid re
 
         // Close nav when a link is clicked
         navLinks.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                navToggle.checked = false;
-                navLinks.classList.remove('active');
+            link.addEventListener('click', (e) => {
+                const targetId = link.getAttribute('href');
+                // If the link is just '#', scroll to the top of the window
+                if (targetId === '#') {
+                    e.preventDefault(); // Prevent default anchor jump
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    // For other named anchors, use the existing smooth scroll logic
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        e.preventDefault(); // Prevent default anchor jump
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+
+                // Close mobile menu if open
+                if (navToggle && navToggle.checked) {
+                    navToggle.checked = false;
+                    navLinks.classList.remove('active');
+                }
             });
         });
     }
 
     // Smooth scroll for nav links (if not already handled by CSS scroll-behavior)
+    // This block is now redundant for internal links handled above, but kept for external links or
+    // if other parts of the site rely on it. The above block handles internal anchors more specifically.
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            const targetId = this.getAttribute('href');
-            const targetElement = document.querySelector(targetId);
-            if (targetElement) {
-                targetElement.scrollIntoView({
-                    behavior: 'smooth'
-                });
-            }
-            // Close mobile menu if open
-            if (navToggle && navToggle.checked) {
-                navToggle.checked = false;
-                navLinks.classList.remove('active');
-            }
-        });
+        // Only attach if not already handled by the primary nav-links listener
+        // This prevents double event listeners for the same elements.
+        if (!anchor.closest('.nav-links')) { 
+            anchor.addEventListener('click', function (e) {
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') { // Explicitly handle # for non-nav-link anchors if any
+                    e.preventDefault();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        e.preventDefault();
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+            });
+        }
     });
-
-    // Intersection Observer for fade-in animation on scroll (for sections with .animate class)
-    // This part was already at the top of your provided script.js, moving it inside DOMContentLoaded
-    // for better practice and to avoid duplicate observers if not desired.
-    // The animateElements and observer variables are already defined above.
-    // The logic to add/remove 'show' class is here.
 });
