@@ -135,7 +135,7 @@ async function askGemini() {
 
     userInputEl.value = ''; // Clear input field after getting prompt and adding to history
 
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${API_KEY}`;
     
     // Now send the GLOBAL conversationHistory, which includes the latest user input
     const payload = {
