@@ -108,6 +108,9 @@ function appendMessageToChat(role, text) {
 // The main function to send prompt to Gemini
 async function askGemini() {
     const userInput = userInputEl.value.trim();
+    // --- DEBUG LOG: Check the value of userInput right before the validation ---
+    console.log("User Input before check:", `'${userInput}'`, "Length:", userInput.length); 
+
     if (!userInput) { // Re-enabled this check
         displayError("Please enter a question.");
         return;
