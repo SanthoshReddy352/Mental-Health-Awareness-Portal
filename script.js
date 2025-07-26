@@ -17,7 +17,7 @@ animateElements.forEach(el => observer.observe(el));
 // <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
 // IMPORTANT: Replace with your actual API key
-const API_KEY = 'AIzaSyCG7KClF3paXEZF3xV_h2A'; // Placeholder - user should replace with their key
+const API_KEY = 'AIzaSyCG7KClF3paXEZfOMRoaKV-BVRH3xV_h2A'; // Placeholder - user should replace with their key
 
 // --- Global Variable for Conversation History ---
 // Initialize with your system instructions.
