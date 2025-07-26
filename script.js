@@ -54,6 +54,9 @@ geminiResponseEl.parentNode.insertBefore(errorDisplay, loadingIndicator.nextSibl
 // Flag to control initial scroll behavior for chat
 let isInitialChatLoad = true;
 
+// New flag to prevent multiple simultaneous submissions
+let isSendingMessage = false;
+
 // Helper functions for UI
 function showLoading() {
     loadingIndicator.classList.remove('hidden');
@@ -107,6 +110,12 @@ function appendMessageToChat(role, text) {
 
 // The main function to send prompt to Gemini
 async function askGemini() {
+    // Prevent multiple calls if a message is already being sent
+    if (isSendingMessage) {
+        console.log("Message already being sent. Ignoring duplicate call.");
+        return;
+    }
+
     const userInput = userInputEl.value.trim();
     // --- DEBUG LOG: Check the value of userInput right before the validation ---
     console.log("User Input before check:", `'${userInput}'`, "Length:", userInput.length); 
@@ -116,9 +125,10 @@ async function askGemini() {
     //     return;
     // }
 
+    isSendingMessage = true; // Set flag to true immediately upon valid input
     showLoading(); // Show loading indicator and disable elements
 
-    // --- CRITICAL CHANGE: Add user's message to the GLOBAL conversationHistory immediately ---
+    // Add user's message to the GLOBAL conversationHistory immediately
     conversationHistory.push({ role: "user", parts: [{ text: userInput }] });
     
     appendMessageToChat('user', userInput); // Display user message immediately
@@ -127,7 +137,7 @@ async function askGemini() {
 
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
     
-    // --- Now send the GLOBAL conversationHistory, which includes the latest user input ---
+    // Now send the GLOBAL conversationHistory, which includes the latest user input
     const payload = {
         contents: conversationHistory, // Send the updated global history
         // Optional: safety settings directly in the fetch call if you prefer
@@ -161,10 +171,10 @@ async function askGemini() {
         if (data && data.candidates && data.candidates.length > 0) {
             const geminiResponseText = data.candidates[0].content.parts[0].text;
             
-            // --- Add model's response to GLOBAL conversationHistory ---
+            // Add model's response to GLOBAL conversationHistory
             conversationHistory.push({ role: "model", parts: [{ text: geminiResponseText }] });
 
-            // --- Display formatted response ---
+            // Display formatted response
             appendMessageToChat('model', geminiResponseText); 
         } else if (data.promptFeedback && data.promptFeedback.blockReason) {
              // Handle cases where the prompt itself was blocked by safety settings
@@ -181,6 +191,7 @@ async function askGemini() {
         console.error("Fetch error:", err); // Log full error for debugging
         displayError(`Sorry, I was unable to get a response from Gemini: ${err.message || err}. Check console for details.`);
     } finally {
+        isSendingMessage = false; // Reset flag in finally block
         hideLoading(); // Hide loading indicator and re-enable elements
     }
 }
