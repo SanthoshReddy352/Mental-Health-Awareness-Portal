@@ -163,4 +163,4 @@ Distributed under the MIT License. See LICENSE for more information.
 Contact
 Your Name/Team Name - [Your Email/Website/LinkedIn]
 
-Project Link: 
+Project Link: https://github.com/SanthoshReddy352/Mental-Health-Awareness-Portal/tree/main
