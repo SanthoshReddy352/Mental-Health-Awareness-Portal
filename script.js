@@ -80,7 +80,7 @@ function displayError(message) {
     
     // Create a new div for the error message to append to the chat as a chat bubble
     const errorMessageElement = document.createElement('div');
-    errorMessageElement.classList.add('chat-message', 'error-message');
+    errorMessageElement.classList.add('chat-message', 'error-message-style'); // Use the new class
     errorMessageElement.innerHTML = `Error: ${message}`;
     geminiResponseEl.appendChild(errorMessageElement);
     
@@ -206,20 +206,116 @@ userInputEl.addEventListener('keypress', (event) => {
     }
 });
 
-// --- Initial Chat Display ---
-// Append the initial "model" message from history to the chat box on load
-document.addEventListener('DOMContentLoaded', () => {
-    // We already put the initial model message in conversationHistory
-    // Append it to the display when the DOM is ready.
-    // Use the last element of the history which should be the model's greeting.
-    if (conversationHistory.length > 0 && conversationHistory[conversationHistory.length - 1].role === 'model') {
-        // We only append the model's greeting. The user's system instruction is internal.
-        appendMessageToChat(
-            conversationHistory[conversationHistory.length - 1].role,
-            conversationHistory[conversationHistory.length - 1].parts[0].text
-        );
-        isInitialChatLoad = false; // Set flag to false after the initial message
+// --- Dark Mode Toggle Functionality ---
+const darkModeToggle = document.getElementById('darkModeToggle');
+const body = document.body;
+
+// Function to set the theme based on localStorage or system preference
+function setThemeFromLocalStorage() {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+        body.classList.add('dark-mode');
+        // Update icon to sun for dark mode
+        if (darkModeToggle) {
+            darkModeToggle.querySelector('i').classList.remove('fa-moon');
+            darkModeToggle.querySelector('i').classList.add('fa-sun');
+        }
+    } else {
+        body.classList.remove('dark-mode');
+        // Update icon to moon for light mode
+        if (darkModeToggle) {
+            darkModeToggle.querySelector('i').classList.remove('fa-sun');
+            darkModeToggle.querySelector('i').classList.add('fa-moon');
+        }
     }
+}
+
+// Event listener for the dark mode toggle button
+if (darkModeToggle) {
+    darkModeToggle.addEventListener('click', () => {
+        body.classList.toggle('dark-mode');
+        if (body.classList.contains('dark-mode')) {
+            localStorage.setItem('theme', 'dark');
+            darkModeToggle.querySelector('i').classList.remove('fa-moon');
+            darkModeToggle.querySelector('i').classList.add('fa-sun');
+        } else {
+            localStorage.setItem('theme', 'light');
+            darkModeToggle.querySelector('i').classList.remove('fa-sun');
+            darkModeToggle.querySelector('i').classList.add('fa-moon');
+        }
+    });
+}
+
+
+// --- Chart Modal Functionality ---
+const chartModal = document.getElementById('chartModal');
+const modalChartTitle = document.getElementById('modalChartTitle');
+const maximizedChartCanvas = document.getElementById('maximizedChartCanvas');
+const chartCloseButton = document.querySelector('.chart-close-button');
+
+let currentChartInstance = null; // To hold the Chart.js instance in the modal
+
+// Store chart configurations globally
+let diagnosisChartConfig = null;
+let prevalenceChartConfig = null;
+
+function showChartModal(chartId) {
+    let chartConfig;
+    let title;
+
+    if (chartId === 'diagnosisChart') {
+        chartConfig = diagnosisChartConfig;
+        title = "Mental Health Diagnoses Over the Years";
+    } else if (chartId === 'prevalenceChart') {
+        chartConfig = prevalenceChartConfig;
+        title = "Global Mental Disorder Prevalence by Gender";
+    }
+
+    if (chartConfig) {
+        modalChartTitle.textContent = title;
+        
+        // Destroy existing chart instance if any
+        if (currentChartInstance) {
+            currentChartInstance.destroy();
+        }
+
+        // Create a new chart instance in the modal canvas
+        const ctx = maximizedChartCanvas.getContext('2d');
+        currentChartInstance = new Chart(ctx, chartConfig);
+
+        chartModal.classList.remove('hidden');
+        document.body.classList.add('no-scroll');
+    }
+}
+
+function closeChartModal() {
+    if (currentChartInstance) {
+        currentChartInstance.destroy(); // Destroy the chart instance when closing
+        currentChartInstance = null;
+    }
+    chartModal.classList.add('hidden');
+    document.body.classList.remove('no-scroll');
+}
+
+// Add event listeners to maximize buttons
+document.addEventListener('DOMContentLoaded', () => {
+    // Set theme on initial load
+    setThemeFromLocalStorage();
+
+    document.querySelectorAll('.maximize-chart-btn').forEach(button => {
+        button.addEventListener('click', (event) => {
+            const chartId = event.currentTarget.dataset.chartId;
+            showChartModal(chartId);
+        });
+    });
+
+    // Close chart modal event listeners
+    chartCloseButton.addEventListener('click', closeChartModal);
+    chartModal.addEventListener('click', (e) => {
+        if (e.target === chartModal) {
+            closeChartModal();
+        }
+    });
 
     // --- Quiz Summary Display Logic ---
     const quizSummaryContainer = document.getElementById('quiz-summary-container');
@@ -330,32 +426,72 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Story Data and Rendering ---
     const storiesData = [
         {
-            title: "Finding My Voice After Depression",
-            content: "For years, I battled with a silent depression that made even simple tasks feel impossible. The world felt muted, and I often found myself withdrawing from friends and family. It took immense courage, but I finally reached out for professional help. Therapy, combined with small, consistent steps like daily walks and journaling, slowly brought color back into my life. I learned to identify triggers, build coping mechanisms, and, most importantly, to be kind to myself. My journey isn't over, but I now have the tools and support system to navigate the ups and downs, and I'm living a life I once thought was out of reach.",
-            author: "Sarah M."
+            title: "John's Journey: From Child Prodigy to Radio Host",
+            image: "https://cdn.prod.website-files.com/6239d220454ddd52a31bc6fb/62c6fd7339515d8f63ed2fa7_John-S.jpg",
+            content: "John Shivers, a gifted child who read newspapers at three, faced early bullying and alcoholism by age nine. He left school but earned a GED and built a successful journalism career, now an award-winning radio host at 98.7 WVMO. Despite his achievements, John has struggled with chronic homelessness and mental health issues. Diagnosed with depression and later anxiety, he says his illness often goes unseen, with others focusing only on his addictions.",
+            author: "John Shivers"
         },
         {
-            title: "Overcoming Anxiety: A Step-by-Step Triumph",
-            content: "My anxiety used to dictate every decision, from what I ate to where I went. Social situations were terrifying, and panic attacks were a regular occurrence. I felt trapped by my own mind. With the guidance of a cognitive-behavioral therapist, I began to challenge my anxious thoughts and gradually expose myself to situations I feared. It was incredibly difficult at first, but each small victory built my confidence. I discovered mindfulness techniques that helped ground me in moments of panic. Today, I can confidently say that I manage my anxiety; it no longer manages me. I've learned that courage isn't the absence of fear, but the triumph over it.",
-            author: "David R."
+            title: "Roben's Retirement: Finding Stability After Trauma",
+            image: "https://cdn.prod.website-files.com/6239d220454ddd52a31bc6fb/62c6fda15d972a016f0aa384_Roben.jpg",
+            content: "Roben R., a 49-year-old Madison resident, spent much of her life battling PTSD, borderline personality disorder, and severe depression, which led to homelessness, addiction, and petty crimes. Despite years of therapy and medication, real change came after a hospitalization following an overdose. With support from Journey Mental Health Center’s Bayside Care Center and Recovery House, Roben found stability, proper treatment, and a renewed sense of purpose. She now feels respected and supported, and enjoys cooking, baking, making jewelry, and watching action movies. Roben says she’s finally “retiring” from her past life.",
+            author: "Roben R."
         },
         {
-            title: "Embracing My Bipolar Journey",
-            content: "Living with bipolar disorder felt like being on an unpredictable rollercoaster. The highs were exhilarating but fleeting, and the lows were crushing. For a long time, I tried to hide my struggles, fearing judgment. The turning point came when I found a psychiatrist who truly listened and a support group where I felt understood. Medication, consistent therapy, and a strong routine became my anchors. I've learned to recognize my mood patterns and communicate my needs to loved ones. My journey is ongoing, but I've found stability, self-acceptance, and a profound appreciation for every moment. My diagnosis doesn't define me; my resilience does.",
-            author: "Emily C."
+            title: "Mary's Resilience: From Loss to Peer Supporter",
+            image: "https://cdn.prod.website-files.com/6239d220454ddd52a31bc6fb/62c6fd8b3fc8c9e9a7b9a78e_Mary.jpg",
+            content: "Mary, a 37-year-old woman with a degree in comparative literature, lives with schizoaffective disorder bipolar type. After losing her supportive mother to cancer in her 20s, she became depressed and experienced psychotic symptoms, leading to hospitalization and a long recovery. With therapy and medication, Mary stabilized and became involved with SOAR and Journey Mental Health Center’s Yahara House, where she found community, support, and purpose. She now works as a peer supporter, runs a group for voice-hearers, and is taking classes with hopes of joining the Peace Corps. Mary’s journey shows that recovery is possible, and she believes she can do anything she sets her mind to.",
+            author: "Mary"
         },
         {
-            title: "Healing from Trauma and Finding Peace",
-            content: "The echoes of past trauma haunted my days and nights, making it hard to trust, to feel safe, or to simply exist without a sense of dread. I carried a heavy burden, believing I was broken beyond repair. Through trauma-informed therapy, I slowly began to process my experiences in a safe and controlled environment. It was painful work, but with each session, a little more light entered. I learned to regulate my emotions, build healthy boundaries, and reclaim my narrative. Healing is not linear, but I've found a deep sense of peace and a renewed capacity for joy. My past is part of my story, but it no longer controls my future.",
-            author: "Alex P."
+            title: "Kristen's Advocacy: Defying Stigma with Art and Hope",
+            image: "https://cdn.prod.website-files.com/6239d220454ddd52a31bc6fb/62c6fd979e718cd519e61cd5_Kristen.jpg",
+            content: "Kristen, 37, has faced a long journey with bipolar II, anxiety, and fibromyalgia since her teens. After a severe mental health crisis, including hallucinations and self-harm, she found crucial support at Journey’s Bayside Care Center. The care and guidance she received helped her stabilize and take steps toward recovery. Now working as a caregiver and preparing to pursue a dual master’s degree in art therapy and counseling, Kristen is determined to use her experiences to help others. She speaks out against the stigma surrounding mental illness, saying, “My diagnosis doesn’t define me. You don’t need to be scared of me.”",
+            author: "Kristen"
         }
     ];
 
+    // --- Disorder Data and Rendering ---
+    const disordersData = [
+        {
+            title: "Schizophrenia",
+            image: "https://media.gettyimages.com/id/487729535/photo/lost-and-alone.jpg?s=612x612&w=0&k=20&c=CIiCGszVkkcz3-LUhV0gzn7tEbqe_zv7YLsW7P3NV3c=",
+            snippet: "A serious mental disorder affecting how a person thinks, feels, and behaves.",
+            fullContent: "Schizophrenia is a chronic and severe mental disorder that affects how a person thinks, feels, and behaves. People with schizophrenia may seem like they have lost touch with reality, which can be distressing for them and for their families. Symptoms can include hallucinations (seeing or hearing things that aren't there), delusions (fixed false beliefs), disorganized thinking, and a lack of motivation or expression. While there is no cure, it is treatable with medication, therapy, and support, allowing many individuals to lead fulfilling lives.",
+            wikipediaLink: "https://en.wikipedia.org/wiki/Schizophrenia"
+        },
+        {
+            title: "PTSD",
+            image: "https://media.gettyimages.com/id/1330747633/photo/depressed-soldier-sitting-on-sofa-with-his-family.jpg?s=612x612&w=0&k=20&c=bz2hONOyTbWLNVZer6B-H1BHWg2WTbZAX_mOoEatcSY=",
+            snippet: "A condition triggered by experiencing or witnessing a traumatic event.",
+            fullContent: "Post-Traumatic Stress Disorder (PTSD) is a mental health condition that's triggered by a terrifying event — either experiencing it or witnessing it. Symptoms may include flashbacks, nightmares, severe anxiety, and uncontrollable thoughts about the event. Many people who go through traumatic events may have temporary difficulty adjusting and coping, but with time and good self-care habits, they usually get better. If the symptoms get worse, last for months or even years, and interfere with your daily functioning, you may have PTSD. Effective treatments like therapy and medication can help manage symptoms and improve quality of life.",
+            wikipediaLink: "https://en.wikipedia.org/wiki/Posttraumatic_stress_disorder"
+        },
+        {
+            title: "Eating Disorders",
+            image: "https://media.gettyimages.com/id/157639274/photo/dangerous-behaviour.jpg?s=612x612&w=0&k=20&c=fjzeW0XAjY9J_yUWsaszY7SPh1vnjh9TmQUxCHfMtiY=",
+            snippet: "Disorders characterized by abnormal or disturbed eating habits.",
+            fullContent: "Eating disorders are serious and often fatal illnesses that are associated with severe disturbances in people’s eating behaviors and related thoughts and emotions. Common eating disorders include anorexia nervosa, bulimia nervosa, and binge-eating disorder. These conditions can significantly impact physical health, emotional well-being, and social functioning. They are not simply about food; they are complex mental health conditions that require professional treatment, often involving a combination of therapy, nutritional counseling, and medical monitoring.",
+            wikipediaLink: "https://en.wikipedia.org/wiki/Eating_disorder"
+        },
+        {
+            title: "OCD",
+            image: "https://media.gettyimages.com/id/77103424/photo/man-cutting-grass-with-scissors.jpg?s=612x612&w=0&k=20&c=KQuzprmGurKpeQkEaSR9CYRnzo3utCRMQ-_gMB1LB24=",
+            snippet: "A disorder where people have recurring, unwanted thoughts and behaviors.",
+            fullContent: "Obsessive-Compulsive Disorder (OCD) is a mental health disorder that features a pattern of unwanted thoughts and fears (obsessions) that lead you to do repetitive behaviors (compulsions). These obsessions and compulsions interfere with daily activities and cause significant distress. Obsessions are recurrent and persistent thoughts, urges, or images that are experienced as intrusive and unwanted. Compulsions are repetitive behaviors or mental acts that an individual feels driven to perform in response to an obsession or according to rules that must be applied rigidly. Treatment often involves cognitive-behavioral therapy (CBT), particularly exposure and response prevention (ERP), and sometimes medication.",
+            wikipediaLink: "https://en.wikipedia.org/wiki/Obsessive–compulsive_disorder"
+        }
+    ];
+
+
     const storyListContainer = document.querySelector('#stories .story-list');
+    const disorderListContainer = document.querySelector('#info .disorder-list'); // New container for disorders
     const storyModal = document.getElementById('storyModal');
     const modalStoryTitle = document.getElementById('modalStoryTitle');
     const modalStoryContent = document.getElementById('modalStoryContent');
     const modalStoryAuthor = document.getElementById('modalStoryAuthor');
+    const modalDisorderLinkContainer = document.getElementById('modalDisorderLinkContainer'); // New container for disorder link
+    const modalDisorderLink = document.getElementById('modalDisorderLink'); // The actual link
     const closeButton = document.querySelector('.modal-overlay .close-button');
 
     // Function to truncate text
@@ -367,6 +503,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Render stories
+    storyListContainer.innerHTML = ''; // Clear existing stories
     storiesData.forEach(story => {
         const storyCard = document.createElement('div');
         storyCard.classList.add('story-card');
@@ -374,6 +511,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const snippet = truncateText(story.content, 150); // Adjust snippet length as needed
 
         storyCard.innerHTML = `
+            <img src="${story.image}" alt="${story.title}" class="story-card-img">
             <h3>${story.title}</h3>
             <p class="story-snippet">${snippet}</p>
             <span class="story-author">${story.author}</span>
@@ -386,12 +524,46 @@ document.addEventListener('DOMContentLoaded', () => {
             modalStoryTitle.textContent = story.title;
             modalStoryContent.textContent = story.content; // Full content
             modalStoryAuthor.textContent = `- ${story.author}`;
+            modalStoryAuthor.style.display = 'block'; // Ensure author is shown for stories
+            modalDisorderLinkContainer.style.display = 'none'; // Hide Wikipedia link for stories
             storyModal.classList.remove('hidden');
             document.body.classList.add('no-scroll'); // Prevent background scroll
         });
 
         storyListContainer.appendChild(storyCard);
     });
+
+    // Render disorders
+    disorderListContainer.innerHTML = ''; // Clear existing disorders
+    disordersData.forEach(disorder => {
+        const disorderCard = document.createElement('div');
+        disorderCard.classList.add('disorder-card'); // Keep existing disorder-card class for styling
+        
+        const snippet = truncateText(disorder.snippet, 100); // Shorter snippet for disorders
+
+        disorderCard.innerHTML = `
+            <img src="${disorder.image}" style="border-radius: 5px;" alt="${disorder.title}">
+            <h3>${disorder.title}</h3>
+            <p class="disorder-snippet">${snippet}</p>
+            <button class="read-more-btn">Read More</button>
+        `;
+        
+        // Add event listener to the "Read More" button
+        const readMoreBtn = disorderCard.querySelector('.read-more-btn');
+        readMoreBtn.addEventListener('click', () => {
+            modalStoryTitle.textContent = disorder.title;
+            modalStoryContent.textContent = disorder.fullContent; // Full content for disorder
+            modalStoryAuthor.style.display = 'none'; // Hide author for disorders
+            modalDisorderLink.href = disorder.wikipediaLink;
+            modalDisorderLinkContainer.style.display = 'block'; // Show Wikipedia link container
+            modalDisorderLink.style.display = 'inline-block'; // Show the link itself
+            storyModal.classList.remove('hidden');
+            document.body.classList.add('no-scroll'); // Prevent background scroll
+        });
+
+        disorderListContainer.appendChild(disorderCard);
+    });
+
 
     // Close modal event listeners
     closeButton.addEventListener('click', () => {
@@ -412,29 +584,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const savedMessageEl = document.getElementById('savedMessage');
 
     if (saveStoryBtn && yourStoryTextarea && savedMessageEl) {
+        // Add base class for transitions
+        savedMessageEl.classList.add('saved-message-base');
+
         saveStoryBtn.onclick = function() {
             const story = yourStoryTextarea.value;
+            // Remove previous status classes
+            savedMessageEl.classList.remove('saved-message-success', 'saved-message-warning', 'show');
+            
             if (story.trim().length > 0) {
                 localStorage.setItem('yourStory', story);
                 savedMessageEl.textContent = 'Your story is saved safely in your browser.';
-                savedMessageEl.style.display = 'flex'; // Use flex for centering content
-                savedMessageEl.style.color = ''; // Reset color
-                savedMessageEl.style.backgroundColor = '#d4edda'; // Success background
-                savedMessageEl.style.borderColor = '#c3e6cb'; // Success border
+                savedMessageEl.classList.add('saved-message-success', 'show'); // Add success class and show
                 setTimeout(() => {
-                    savedMessageEl.style.display = 'none';
+                    savedMessageEl.classList.remove('show'); // Hide after delay
                 }, 2500);
             } else {
                 savedMessageEl.textContent = 'Please write something before saving.';
-                savedMessageEl.style.display = 'flex'; // Use flex for centering content
-                savedMessageEl.style.color = '#856404'; // Warning color
-                savedMessageEl.style.backgroundColor = '#fff3cd'; // Warning background
-                savedMessageEl.style.borderColor = '#ffeeba'; // Warning border
+                savedMessageEl.classList.add('saved-message-warning', 'show'); // Add warning class and show
                 setTimeout(() => {
-                    savedMessageEl.style.display = 'none';
-                    savedMessageEl.style.color = '';
-                    savedMessageEl.style.backgroundColor = '';
-                    savedMessageEl.style.borderColor = '';
+                    savedMessageEl.classList.remove('show'); // Hide after delay
                 }, 3000);
             }
         };
@@ -463,8 +632,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const sortedYears = Object.keys(yearCounts).sort((a, b) => a - b);
             const counts = sortedYears.map(year => yearCounts[year]);
 
-            const ctx = document.getElementById('diagnosisChart').getContext('2d');
-            new Chart(ctx, {
+            diagnosisChartConfig = { // Store the config
                 type: 'line',
                 data: {
                     labels: sortedYears,
@@ -485,20 +653,47 @@ document.addEventListener('DOMContentLoaded', () => {
                         title: {
                             display: true,
                             text: 'Mental Health Diagnoses Over the Years',
-                            font: { size: 18 }
+                            font: { size: 18, color: 'var(--text-color-primary)' } // Use variable for chart title
+                        },
+                        legend: {
+                            labels: {
+                                color: 'var(--text-color-primary)' // Use variable for legend text
+                            }
                         }
                     },
                     scales: {
                         y: {
                             beginAtZero: true,
-                            title: { display: true, text: 'Number of Diagnoses' }
+                            title: { 
+                                display: true, 
+                                text: 'Number of Diagnoses', 
+                                color: 'var(--text-color-primary)' // Use variable for axis title
+                            },
+                            ticks: {
+                                color: 'var(--text-color-primary)' // Use variable for axis labels
+                            },
+                            grid: {
+                                color: 'var(--card-border)' // Use variable for grid lines
+                            }
                         },
                         x: {
-                            title: { display: true, text: 'Year' }
+                            title: { 
+                                display: true, 
+                                text: 'Year', 
+                                color: 'var(--text-color-primary)' // Use variable for axis title
+                            },
+                            ticks: {
+                                color: 'var(--text-color-primary)' // Use variable for axis labels
+                            },
+                            grid: {
+                                color: 'var(--card-border)' // Use variable for grid lines
+                            }
                         }
                     }
                 }
-            });
+            };
+            const ctx = document.getElementById('diagnosisChart').getContext('2d');
+            new Chart(ctx, diagnosisChartConfig); // Render initial chart
         })
         .catch(error => { console.error('Error loading diagnoses JSON:', error); });
 
@@ -522,8 +717,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const maleVals = years.map(y => maleMap.get(y) !== undefined ? maleMap.get(y).toFixed(2) : null);
             const femaleVals = years.map(y => femaleMap.get(y) !== undefined ? femaleMap.get(y).toFixed(2) : null);
 
-            const ctx = document.getElementById('prevalenceChart').getContext('2d');
-            new Chart(ctx, {
+            prevalenceChartConfig = { // Store the config
                 type: 'line',
                 data: {
                     labels: years,
@@ -549,20 +743,48 @@ document.addEventListener('DOMContentLoaded', () => {
                     plugins: {
                         title: {
                             display: true,
-                            text: 'Global Mental Disorder Prevalence by Gender'
+                            text: 'Global Mental Disorder Prevalence by Gender',
+                            font: { size: 18, color: 'var(--text-color-primary)' } // Use variable for chart title
+                        },
+                        legend: {
+                            labels: {
+                                color: 'var(--text-color-primary)' // Use variable for legend text
+                            }
                         }
                     },
                     scales: {
                         y: {
-                            title: { display: true, text: 'Prevalence (%)' },
-                            beginAtZero: false
+                            title: { 
+                                display: true, 
+                                text: 'Prevalence (%)', 
+                                color: 'var(--text-color-primary)' // Use variable for axis title
+                            },
+                            beginAtZero: false,
+                            ticks: {
+                                color: 'var(--text-color-primary)' // Use variable for axis labels
+                            },
+                            grid: {
+                                color: 'var(--card-border)' // Use variable for grid lines
+                            }
                         },
                         x: {
-                            title: { display: true, text: 'Year' }
+                            title: { 
+                                display: true, 
+                                text: 'Year', 
+                                color: 'var(--text-color-primary)' // Use variable for axis title
+                            },
+                            ticks: {
+                                color: 'var(--text-color-primary)' // Use variable for axis labels
+                            },
+                            grid: {
+                                color: 'var(--card-border)' // Use variable for grid lines
+                            }
                         }
                     }
                 }
-            });
+            };
+            const ctx = document.getElementById('prevalenceChart').getContext('2d');
+            new Chart(ctx, prevalenceChartConfig); // Render initial chart
         })
         .catch(error => { console.error('Error loading prevalence JSON:', error); });
 

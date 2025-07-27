@@ -6,16 +6,197 @@
   scroll-behavior: smooth;
 }
 
+/* CSS Variables for theming */
+:root {
+  /* Light Mode Colors */
+  --bg-color-primary: #f3f7fa; /* Main page background */
+  --bg-color-secondary: #eef3f7; /* For sections like #why-mental-health, #graph-section-1 */
+  --bg-color-tertiary: #e0f2f7; /* For sections like #quick-explore, #stories */
+
+  --text-color-primary: #222; /* Main text color */
+  --text-color-secondary: #555; /* For less prominent text, paragraphs */
+
+  --header-bg: #254E70; /* Navbar background */
+  --header-text: #fff; /* Navbar text/icons */
+  --nav-link-hover: #A7C7E7; /* Navbar link hover color */
+
+  --accent-color-primary: #3E93AA; /* Main accent blue (e.g., icons, buttons, question number) */
+  --accent-color-secondary: #A7C7E7; /* Lighter accent blue (e.g., quiz options, user chat bubble) */
+
+  --card-bg: #fff; /* Background for most cards/sections */
+  --card-shadow: rgba(0,0,0,0.1);
+  --card-border: #e0e0e0;
+
+  --button-bg-primary: #254E70;
+  --button-text-primary: #fff;
+  --button-bg-secondary: #5f697c;
+  --button-hover-primary: #3E93AA;
+  --button-hover-secondary: #7a869a;
+
+  --footer-bg: #254E70;
+  --footer-text: #fff;
+  --footer-link: #A7C7E7;
+
+  --input-border: #ccc;
+  --input-bg: #fff;
+
+  --chat-bg: #f9f9f9;
+  --chat-border: #e0e0e0;
+  --user-bubble-bg: #A7C7E7;
+  --user-bubble-text: #222;
+  --model-bubble-bg: #E4EAF2;
+  --model-bubble-text: #333;
+  --code-block-bg: #f0f0f0;
+  --inline-code-bg: #e6e6e6;
+  --inline-code-text: #c7254e;
+
+  --error-bg: #ffe0e0;
+  --error-text: #cc0000;
+  --error-border: #ffb3b3;
+
+  --quiz-header-gradient-start: #c2e9fb;
+  --quiz-header-gradient-end: #a1c4fd;
+  --quiz-option-bg: #e4eaf2;
+  --quiz-option-hover-selected: #A7C7E7;
+  --quiz-submit-bg: #47B39C;
+  --quiz-submit-hover: #388e7b;
+
+  --story-write-bg-gradient-start: #f0f8ff;
+  --story-write-bg-gradient-end: #e0f2f7;
+  --story-write-border: #d0e8f2;
+  --story-write-shadow: rgba(0,0,0,0.12);
+  --story-write-textarea-border: #a7c7e7;
+  --story-write-textarea-focus-border: #3E93AA;
+  --story-write-textarea-focus-shadow: rgba(62, 147, 170, 0.2);
+
+  /* Specific status/message colors - now using vars */
+  --summary-status-good-bg: #d4edda;
+  --summary-status-good-text: #155724;
+  --summary-status-good-border: #c3e6cb;
+
+  --summary-status-medium-bg: #cce5ff;
+  --summary-status-medium-text: #004085;
+  --summary-status-medium-border: #b8daff;
+
+  --summary-status-average-bg: #fff3cd;
+  --summary-status-average-text: #856404;
+  --summary-status-average-border: #ffeeba;
+
+  --summary-status-bad-bg: #f8d7da;
+  --summary-status-bad-text: #721c24;
+  --summary-status-bad-border: #f5c6cb;
+
+  --table-header-bg: #eef3f7;
+  --table-border: #ddd;
+  --table-row-even-bg: #f9f9f9;
+
+  --modal-overlay-bg: rgba(0, 0, 0, 0.7);
+  --modal-bg: #fff;
+  --modal-shadow: rgba(0, 0, 0, 0.3);
+  --close-button-color: #888;
+  --close-button-hover: #555;
+}
+
+/* Dark Mode Colors */
+body.dark-mode {
+  --bg-color-primary: #1a1a2e;
+  --bg-color-secondary: #212845;
+  --bg-color-tertiary: #16213e;
+
+  --text-color-primary: #e0e0e0;
+  --text-color-secondary: #b0b0b0;
+
+  --header-bg: #0f1a2a;
+  --header-text: #fff;
+  --nav-link-hover: #3282b8;
+
+  --accent-color-primary: #3282b8;
+  --accent-color-secondary: #0f4c75;
+
+  --card-bg: #212845;
+  --card-shadow: rgba(0,0,0,0.4);
+  --card-border: #4a4a6e;
+
+  --button-bg-primary: #0f4c75;
+  --button-text-primary: #fff;
+  --button-bg-secondary: #3282b8;
+  --button-hover-primary: #3282b8;
+  --button-hover-secondary: #0f4c75;
+
+  --footer-bg: #0f1a2a;
+  --footer-text: #e0e0e0;
+  --footer-link: #3282b8;
+
+  --input-border: #4a4a6e;
+  --input-bg: #2c335e;
+
+  --chat-bg: #2c335e;
+  --chat-border: #4a4a6e;
+  --user-bubble-bg: #0f4c75;
+  --user-bubble-text: #e0e0e0;
+  --model-bubble-bg: #3282b8;
+  --model-bubble-text: #e0e0e0;
+  --code-block-bg: #2c335e;
+  --inline-code-bg: #4a4a6e;
+  --inline-code-text: #ff8080;
+
+  --error-bg: #4a1c24;
+  --error-text: #ff8080;
+  --error-border: #ff4d4d;
+
+  --quiz-header-gradient-start: #0f1a2a;
+  --quiz-header-gradient-end: #16213e;
+  --quiz-option-bg: #2c335e;
+  --quiz-option-hover-selected: #0f4c75;
+  --quiz-submit-bg: #007bff;
+  --quiz-submit-hover: #0056b3;
+
+  --story-write-bg-gradient-start: #2c335e;
+  --story-write-bg-gradient-end: #212845;
+  --story-write-border: #4a4a6e;
+  --story-write-shadow: rgba(0,0,0,0.4);
+  --story-write-textarea-border: #4a4a6e;
+  --story-write-textarea-focus-border: #3282b8;
+  --story-write-textarea-focus-shadow: rgba(50, 130, 184, 0.4);
+
+  --summary-status-good-bg: #1f4227;
+  --summary-status-good-text: #90ee90;
+  --summary-status-good-border: #2e8b57;
+
+  --summary-status-medium-bg: #002b5c;
+  --summary-status-medium-text: #89cff0;
+  --summary-status-medium-border: #004c99;
+
+  --summary-status-average-bg: #4a3a0a;
+  --summary-status-average-text: #ffd700;
+  --summary-status-average-border: #ccac00;
+
+  --summary-status-bad-bg: #4a1c24;
+  --summary-status-bad-text: #ff8080;
+  --summary-status-bad-border: #ff4d4d;
+
+  --table-header-bg: #2c335e;
+  --table-border: #4a4a6e;
+  --table-row-even-bg: #212845;
+
+  --modal-overlay-bg: rgba(0, 0, 0, 0.85);
+  --modal-bg: #212845;
+  --modal-shadow: rgba(0, 0, 0, 0.6);
+  --close-button-color: #e0e0e0;
+  --close-button-hover: #fff;
+}
+
+
 html {
-  /* Adjusted scroll-padding-top to account for sticky navbar height */
   scroll-padding-top: 60px;
 }
 
 body {
   font-family: 'Segoe UI', Arial, sans-serif;
-  background: #f3f7fa; /* Light background color for the entire site */
-  color: #222;
+  background: var(--bg-color-primary);
+  color: var(--text-color-primary);
   line-height: 1.6;
+  transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition */
 }
 
 /* Class to prevent scrolling when modal is open */
@@ -25,17 +206,18 @@ body.no-scroll {
 
 /* Navbar Styles (Consolidated for all HTML files) */
 .navbar {
-    background: #254E70; /* Dark blue background */
-    color: #fff;
+    background: var(--header-bg);
+    color: var(--header-text);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 5%; /* Horizontal padding */
-    height: 60px; /* Fixed height for the navbar */
+    padding: 0 5%;
+    height: 60px;
     position: sticky;
     top: 0;
-    z-index: 1000; /* High z-index to stay on top */
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Subtle shadow */
+    z-index: 1000;
+    box-shadow: 0 2px 5px var(--card-shadow);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .nav-left {
@@ -43,17 +225,26 @@ body.no-scroll {
     align-items: center;
 }
 
-.logo-img { /* For header logos in index.html and index3.html */
+.logo-img {
     height: 36px;
     vertical-align: middle;
     margin-right: 10px;
+    /* Optional: Add filter for dark mode if logo is dark on light background */
+    /* filter: invert(var(--logo-invert, 0)); */
+    /* --logo-invert will be 1 in dark mode, 0 in light mode */
+    transition: filter 0.3s ease;
 }
 
-.nav-logo-text { /* For header logo text */
+/* body.dark-mode .logo-img {
+    --logo-invert: 1;
+} */
+
+
+.nav-logo-text {
     font-weight: bold;
     font-size: 1.3em;
     letter-spacing: 1px;
-    margin-left: 10px; /* Space from logo */
+    margin-left: 10px;
 }
 
 /* Navigation links (Consolidated for all HTML files) */
@@ -66,31 +257,28 @@ body.no-scroll {
 }
 
 .nav-links li {
-    margin-left: 24px; /* Space between nav items */
+    margin-left: 24px;
 }
 
 .nav-links a {
-    color: #fff;
+    color: var(--header-text);
     text-decoration: none;
     font-size: 1.06em;
     font-weight: 500;
     transition: color 0.18s;
-    padding: 20px 0; /* Make clickable area larger */
-    display: block; /* For padding to work */
-    /* Desktop: align items for icon and text if present */
+    padding: 20px 0;
     display: flex;
     align-items: center;
-    gap: 5px; /* Small gap between icon and text */
-    justify-content: center; /* Center content horizontally on desktop */
+    gap: 5px;
+    justify-content: center;
 }
 
 .nav-links a:hover,
 .nav-links a:focus {
-    color: #A7C7E7; /* Lighter blue on hover/focus */
+    color: var(--nav-link-hover);
 }
 
-.nav-links i { /* Icons within nav links */
-    /* Removed transform: translateX here for desktop, will use flex gap */
+.nav-links i {
     font-size: medium;
 }
 
@@ -98,64 +286,83 @@ body.no-scroll {
     text-decoration: underline;
 }
 
-/* Mobile Nav Toggle (for index3.html and now index.html) */
+/* Dark Mode Toggle Button */
+.dark-mode-toggle {
+    background: none;
+    border: none;
+    color: var(--header-text);
+    font-size: 1.2em;
+    cursor: pointer;
+    padding: 5px;
+    transition: color 0.2s, transform 0.2s;
+    margin-left: 15px; /* Space from other nav items */
+}
+
+.dark-mode-toggle:hover {
+    color: var(--nav-link-hover);
+    transform: scale(1.1);
+}
+
+/* Mobile Nav Toggle */
 .nav-toggle,
 .nav-toggle-label {
-    display: none; /* Hidden by default for desktop */
+    display: none;
 }
 
 
 /* Hero Section */
 #hero {
-  margin-top: 23px; /* Space from navbar */
-  background: linear-gradient(90deg,#a1c4fd 0%, #c2e9fb 100%);
+  margin-top: 23px;
+  background: linear-gradient(90deg, var(--quiz-header-gradient-end) 0%, var(--quiz-header-gradient-start) 100%);
   padding: 80px 0 50px 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height:500px; /* Fixed height */
+  height:500px;
   text-align: center;
-  color: #254E70; /* Text color for hero content */
+  color: var(--header-bg); /* Text color for hero content */
+  transition: background 0.3s ease, color 0.3s ease;
 }
 .hero-content h1 {
-  font-size: 2.8em; /* Larger heading */
+  font-size: 2.8em;
   margin-bottom: 20px;
 }
 .hero-content p {
   font-size: 1.2em;
   max-width: 700px;
   margin: 0 auto 30px auto;
+  color: var(--text-color-primary); /* Ensure hero text changes color */
 }
-.hero-buttons { /* New style for hero buttons container */
+.hero-buttons {
     display: flex;
     gap: 20px;
     margin-top: 15px;
-    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+    flex-wrap: wrap;
     justify-content: center;
 }
 .hero-content button {
-  background: #254E70;
-  color: #fff;
+  background: var(--button-bg-primary);
+  color: var(--button-text-primary);
   border: none;
   padding: 12px 35px;
   font-size: 1.3em;
   border-radius: 8px;
   cursor: pointer;
   font-weight: bold;
-  transition: background 0.2s, transform 0.1s;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-  margin: 0; /* Reset margin from previous hero-content button style */
+  transition: background 0.2s, transform 0.1s, box-shadow 0.3s ease;
+  box-shadow: 0 4px 10px var(--card-shadow);
+  margin: 0;
 }
-.hero-content button.secondary-cta { /* Style for the new secondary button */
-    background: #5f697c; /* A slightly different color */
+.hero-content button.secondary-cta {
+    background: var(--button-bg-secondary);
 }
 .hero-content button:hover {
-  background: #3E93AA;
+  background: var(--button-hover-primary);
   transform: translateY(-2px);
 }
-.hero-content button.secondary-cta:hover { /* Hover for secondary button */
-    background: #7a869a;
+.hero-content button.secondary-cta:hover {
+    background: var(--button-hover-secondary);
 }
 .hero-content button:active {
   transform: translateY(0);
@@ -163,8 +370,8 @@ body.no-scroll {
 
 /* Shared button style for retake */
 .retake {
-    background: #254E70;
-    color: #fff;
+    background: var(--button-bg-primary);
+    color: var(--button-text-primary);
     border: none;
     padding: 10px 30px;
     font-size: 1.2em;
@@ -174,17 +381,18 @@ body.no-scroll {
     transition: background 0.2s;
 }
 .retake:hover {
-    background: #3E93AA;
+    background: var(--button-hover-primary);
 }
 
 /* New Section: Why Mental Health Matters */
 #why-mental-health {
     padding: 60px 5%;
     text-align: center;
-    background-color: #f9f9f9; /* Slightly different background */
+    background-color: var(--bg-color-secondary);
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 #why-mental-health h2 {
-    color: #254E70;
+    color: var(--header-bg);
     margin-bottom: 40px;
     font-size: 2.2em;
 }
@@ -193,6 +401,7 @@ body.no-scroll {
     margin: 0 auto 40px auto;
     font-size: 1.1em;
     line-height: 1.8;
+    color: var(--text-color-primary);
 }
 .why-points {
     display: flex;
@@ -202,58 +411,59 @@ body.no-scroll {
     margin-bottom: 50px;
 }
 .point-card {
-    background: #fff;
+    background: var(--card-bg);
     border-radius: 12px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    box-shadow: 0 5px 15px var(--card-shadow);
     padding: 25px;
-    flex: 1 1 280px; /* Flexible width for cards */
+    flex: 1 1 280px;
     max-width: 320px;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
-    transition: transform 0.2s ease;
+    transition: transform 0.2s ease, background-color 0.3s ease, box-shadow 0.3s ease;
 }
 .point-card:hover {
     transform: translateY(-8px);
 }
 .point-card i {
     font-size: 3em;
-    color: #3E93AA;
+    color: var(--accent-color-primary);
     margin-bottom: 15px;
 }
 .point-card h3 {
-    color: #254E70;
+    color: var(--header-bg);
     font-size: 1.5em;
     margin-bottom: 10px;
 }
 .point-card p {
     font-size: 0.95em;
-    color: #555;
+    color: var(--text-color-secondary);
     line-height: 1.6;
-    margin: 0; /* Reset paragraph margin */
+    margin: 0;
 }
 .call-to-action-text {
     font-size: 1.3em;
-    color: #254E70;
+    color: var(--header-bg);
     font-weight: bold;
     margin-top: 30px;
     margin-bottom: 20px;
 }
 .button-link {
-    display: inline-block; /* To apply margin/padding to the link itself */
-    text-decoration: none; /* Remove underline from link */
+    display: inline-block;
+    text-decoration: none;
 }
 
 
 /* New Section: Quick Explore */
 #quick-explore {
-    background: #e7f7fa; /* Light blue background */
+    background: var(--bg-color-tertiary);
     padding: 60px 5%;
     text-align: center;
+    transition: background-color 0.3s ease;
 }
 #quick-explore h2 {
-    color: #254E70;
+    color: var(--header-bg);
     margin-bottom: 40px;
     font-size: 2.2em;
 }
@@ -264,15 +474,15 @@ body.no-scroll {
     flex-wrap: wrap;
 }
 .explore-card {
-    background: #fff;
+    background: var(--card-bg);
     border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    box-shadow: 0 4px 12px var(--card-shadow);
     padding: 25px;
     flex: 1 1 280px;
     max-width: 350px;
-    text-decoration: none; /* Remove underline */
-    color: #222;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    text-decoration: none;
+    color: var(--text-color-primary);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease, color 0.3s ease;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -280,196 +490,198 @@ body.no-scroll {
 }
 .explore-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    box-shadow: 0 8px 20px var(--card-shadow);
 }
 .explore-card i {
     font-size: 2.5em;
-    color: #254E70;
+    color: var(--header-bg);
     margin-bottom: 15px;
 }
 .explore-card h3 {
-    color: #254E70;
+    color: var(--header-bg);
     font-size: 1.4em;
     margin-bottom: 10px;
 }
 .explore-card p {
     font-size: 0.95em;
-    color: #555;
+    color: var(--text-color-secondary);
     line-height: 1.6;
     margin: 0;
 }
 
 
-/* Info Section (Common Mental Health Disorders) - for index3.html */
+/* Info Section (Common Mental Health Disorders) */
 #info {
     padding: 20px;
     text-align: center;
-    margin: 50px auto 0 auto; /* Added margin from previous section */
+    margin: 50px auto 0 auto;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 #info h2 {
-    color: #254E70;
+    color: var(--header-bg);
     margin-bottom: 30px;
     font-size: 2.2em;
 }
 
-.disorders-container, .disorders-grid { /* Combined for both index.html and index3.html */
+.disorders-container, .disorder-list {
     display: flex;
-    justify-content: center; /* Center cards */
+    justify-content: center;
     gap: 20px;
     flex-wrap: wrap;
 }
 .disorder-card {
-    background: #fff;
+    background: var(--card-bg);
     border-radius: 10px;
     padding: 12px;
-    flex: 1 1 200px; /* Allow cards to grow and shrink, min-width 200px */
-    max-width: 250px; /* Limit max width for larger screens */
-    margin: 8px; /* Consistent margin for wrapping */
-    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    flex: 1 1 200px;
+    max-width: 250px;
+    margin: 8px;
+    box-shadow: 0 2px 8px var(--card-shadow);
     display: flex;
     flex-direction: column;
     text-align: left;
-    transition: transform 0.2s ease;
-    overflow: hidden; /* Ensure image corners are rounded */
+    transition: transform 0.2s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+    border: 1px solid var(--card-border);
 }
 .disorder-card:hover {
     transform: translateY(-5px);
 }
 .disorder-card img {
     width: 100%;
-    height: 135px; /* Fixed height for images */
-    object-fit: cover; /* Cover the area, crop if necessary */
-    border-radius: 5px; /* Added for consistency */
-    margin-bottom: 10px; /* Space below image */
+    height: 135px;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-bottom: 10px;
 }
 .disorder-card h3 {
-    margin-top: 0;
-    color: #254E70;
+    color: var(--header-bg);
     font-size: 1.4em;
     margin-bottom: 10px;
 }
 .disorder-card p {
     font-size: 0.95em;
     line-height: 1.5;
-    flex-grow: 1; /* Make paragraphs take available space */
-    margin-bottom: 15px; /* Space before link */
+    flex-grow: 1;
+    margin-bottom: 15px;
+    color: var(--text-color-primary);
 }
-.disorder-card a {
-    margin-top: auto; /* Push link to bottom */
-    color: #3E93AA;
-    text-decoration: none;
-    font-weight: bold;
-    display: inline-block; /* For padding */
-    padding-top: 10px; /* Space above link */
-}
-.disorder-card a:hover {
-    text-decoration: underline;
-}
+
 
 /* Stories Section */
 #stories {
-    background: #e7f7fa;
+    background: var(--bg-color-tertiary);
     margin-top: 70px;
-    padding: 60px 5%; /* Increased padding for more breathing room */
+    padding: 40px 5%;
     text-align: center;
+    transition: background-color 0.3s ease;
 }
 #stories h2 {
-    color: #254E70;
-    margin-bottom: 40px; /* More space below heading */
+    color: var(--header-bg);
+    margin-bottom: 40px;
     font-size: 2.2em;
 }
-.story-list, .stories-container { /* Combined for both index.html and index3.html */
+.story-list, .stories-container {
     display: flex;
-    justify-content: center; /* Center story cards */
-    gap: 25px; /* Increased gap between cards */
-    margin-bottom: 40px; /* More space below the story list */
+    justify-content: center;
+    gap: 25px;
+    margin-bottom: 40px;
     flex-wrap: wrap;
 }
 .story-card {
-    background: #fff;
-    border-radius: 12px; /* More rounded corners */
-    padding: 25px; /* Increased padding */
-    min-width: 280px; /* Slightly larger min-width */
-    max-width: 350px; /* Max width for consistency */
-    box-shadow: 0 8px 20px rgba(0,0,0,0.1); /* More pronounced shadow */
-    flex: 1 1 280px;
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 20px;
+    min-width: 250px;
+    max-width: 300px;
+    box-shadow: 0 8px 20px var(--card-shadow);
+    flex: 1 1 250px;
     display: flex;
     flex-direction: column;
     text-align: left;
-    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smoother transitions */
-    border: 1px solid #e0e0e0; /* Subtle border */
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+    border: 1px solid var(--card-border);
 }
 .story-card:hover {
-    transform: translateY(-10px); /* More noticeable lift on hover */
-    box-shadow: 0 12px 25px rgba(0,0,0,0.15); /* Stronger shadow on hover */
+    transform: translateY(-10px);
+    box-shadow: 0 12px 25px var(--card-shadow);
 }
 .story-card h3 {
-    margin-top: 0;
-    color: #254E70;
-    font-size: 1.6em; /* Larger heading for stories */
-    margin-bottom: 15px; /* More space below heading */
+    color: var(--header-bg);
+    font-size: 1.6em;
+    margin-bottom: 15px;
     line-height: 1.3;
 }
-.story-card p.story-snippet { /* Style for the truncated story snippet */
+.story-card p.story-snippet {
     margin: 0 0 15px 0;
     font-style: normal;
-    color: #444;
+    color: var(--text-color-primary);
     flex-grow: 1;
     line-height: 1.7;
     font-size: 1em;
-    overflow: hidden; /* Hide overflow if text is too long */
-    text-overflow: ellipsis; /* Add ellipsis for truncated text */
+    overflow: hidden;
+    text-overflow: ellipsis;
     display: -webkit-box;
-    -webkit-line-clamp: 4; /* Limit to 4 lines for snippet */
+    -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;
 }
-.story-card span.story-author { /* Use a more specific class for author */
+.story-card span.story-author {
     font-weight: bold;
-    color: #3E93AA; /* Use a highlight color for the name */
+    color: var(--accent-color-primary);
     text-align: right;
     display: block;
     margin-top: 10px;
     font-size: 0.95em;
 }
-.story-card .read-more-btn { /* Style for the "Read More" button */
-    background: #3E93AA; /* A distinct color for the button */
-    color: #fff;
+.story-card-img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+/* General styling for .read-more-btn */
+.read-more-btn {
+    background: var(--accent-color-primary);
+    color: var(--button-text-primary);
     border: none;
     padding: 8px 15px;
     border-radius: 6px;
     cursor: pointer;
     transition: background 0.2s, transform 0.1s;
-    margin-top: 15px; /* Space above the button */
-    align-self: flex-end; /* Align button to the right within the card */
+    margin-top: 15px;
+    align-self: flex-end;
     font-size: 0.95em;
 }
-.story-card .read-more-btn:hover {
-    background: #254E70; /* Darker blue on hover */
+.read-more-btn:hover {
+    background: var(--button-bg-primary);
     transform: translateY(-2px);
 }
 
 
-/* Write Your Story Section (Enhanced Styling) */
+/* Write Your Story Section */
 .write-story {
-    margin-top: 40px; /* More space from the story list */
-    background: linear-gradient(135deg, #f0f8ff, #e0f2f7); /* Subtle gradient background */
-    border-radius: 15px; /* More rounded corners */
-    box-shadow: 0 10px 25px rgba(0,0,0,0.12); /* Stronger, softer shadow */
-    padding: 35px; /* Increased padding */
-    max-width: 700px; /* Wider max-width */
+    margin-top: 40px;
+    background: linear-gradient(135deg, var(--story-write-bg-gradient-start), var(--story-write-bg-gradient-end));
+    border-radius: 15px;
+    box-shadow: 0 10px 25px var(--story-write-shadow);
+    padding: 35px;
+    max-width: 700px;
     margin-left: auto;
     margin-right: auto;
-    text-align: center; /* Center content */
-    border: 1px solid #d0e8f2; /* Light border */
+    text-align: center;
+    border: 1px solid var(--story-write-border);
+    transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 .write-story h3 {
-    color: #1C3852; /* Darker heading color */
+    color: var(--header-bg);
     margin-bottom: 15px;
-    font-size: 2em; /* Larger heading */
+    font-size: 2em;
 }
-.write-story .story-intro-text { /* New style for the intro paragraph */
+.write-story .story-intro-text {
     font-size: 1.1em;
-    color: #555;
+    color: var(--text-color-primary);
     margin-bottom: 25px;
     line-height: 1.7;
     max-width: 600px;
@@ -477,91 +689,101 @@ body.no-scroll {
     margin-right: auto;
 }
 .write-story textarea {
-    width: 100%; /* Full width within its container */
-    min-height: 180px; /* Taller textarea */
-    border-radius: 10px; /* More rounded */
-    border: 1px solid #a7c7e7; /* Blueish border */
-    padding: 15px; /* More padding */
-    font-size: 1.05em; /* Slightly larger font */
+    width: 100%;
+    min-height: 180px;
+    border-radius: 10px;
+    border: 1px solid var(--story-write-textarea-border);
+    padding: 15px;
+    font-size: 1.05em;
     resize: vertical;
-    box-shadow: inset 0 2px 5px rgba(0,0,0,0.08); /* More prominent inner shadow */
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: inset 0 2px 5px var(--card-shadow);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease, color 0.3s ease;
+    background-color: var(--input-bg);
+    color: var(--text-color-primary);
 }
 .write-story textarea:focus {
-    border-color: #3E93AA; /* Highlight on focus */
-    box-shadow: inset 0 2px 5px rgba(0,0,0,0.1), 0 0 0 4px rgba(62, 147, 170, 0.2); /* Outer glow on focus */
+    border-color: var(--story-write-textarea-focus-border);
+    box-shadow: inset 0 2px 5px var(--card-shadow), 0 0 0 4px var(--story-write-textarea-focus-shadow);
     outline: none;
 }
 .write-story button {
-    margin-top: 25px; /* More space */
-    padding: 14px 35px; /* Larger button */
-    background: #254E70;
-    color: #fff;
+    margin-top: 25px;
+    padding: 14px 35px;
+    background: var(--button-bg-primary);
+    color: var(--button-text-primary);
     border: none;
-    border-radius: 8px; /* More rounded */
+    border-radius: 8px;
     cursor: pointer;
-    font-size: 1.2em; /* Larger font */
+    font-size: 1.2em;
     font-weight: bold;
     transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.15); /* Button shadow */
+    box-shadow: 0 5px 15px var(--card-shadow);
 }
 .write-story button:hover {
-    background: #3E93AA;
+    background: var(--button-hover-primary);
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    box-shadow: 0 8px 20px var(--card-shadow);
 }
 .write-story button:active {
     transform: translateY(0);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 10px var(--card-shadow);
 }
-.write-story .saved-message { /* Specific style for the saved message */
+/* New classes for saved message styling */
+.saved-message-base {
     margin-top: 20px;
     padding: 12px 20px;
-    background-color: #d4edda; /* Success green background */
-    color: #155724; /* Dark green text */
-    border: 1px solid #c3e6cb;
     border-radius: 8px;
     font-weight: bold;
     font-size: 1em;
-    display: flex; /* Use flex for centering content */
+    display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px; /* Space for potential icon */
-    opacity: 0; /* Start hidden for animation */
-    transform: translateY(10px); /* Start slightly below */
-    transition: opacity 0.3s ease, transform 0.3s ease;
+    gap: 10px;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease, background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
-/* Animation for saved message */
-.write-story .saved-message:not([style*="display: none"]) {
+.saved-message-base.show { /* Use this class to show */
     opacity: 1;
     transform: translateY(0);
+}
+.saved-message-success {
+    background-color: var(--summary-status-good-bg);
+    color: var(--summary-status-good-text);
+    border: 1px solid var(--summary-status-good-border);
+}
+.saved-message-warning {
+    background-color: var(--summary-status-average-bg); /* Using average for warning */
+    color: var(--summary-status-average-text);
+    border: 1px solid var(--summary-status-average-border);
 }
 
 
 /* Footer */
 footer {
-    background: #254E70;
-    color: #fff;
+    background: var(--footer-bg);
+    color: var(--footer-text);
     text-align: center;
     padding: 18px 0 8px 0;
     margin-top: 35px;
     font-size: 0.9em;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 footer a {
-    color: #A7C7E7;
-    text-decoration: none; /* No underline by default */
+    color: var(--footer-link);
+    text-decoration: none;
     margin: 0 5px;
 }
 footer a:hover {
     text-decoration: underline;
 }
-.logo-img-footer { /* Specific style for footer logo */
+.logo-img-footer {
     height: 32px;
     vertical-align: middle;
     margin-bottom: -8px;
     margin-right: 8px;
 }
-.footer-container { /* For index.html footer layout */
+.footer-container {
   display: flex;
   align-items: center;
   max-width: 1100px;
@@ -569,11 +791,11 @@ footer a:hover {
   justify-content: space-between;
   flex-wrap: wrap;
 }
-.footer-container .logo { /* For index.html footer logo (older, less specific) */
+.footer-container .logo {
   margin-right: 14px;
   height: 32px;
 }
-.footer-links { /* For index.html footer links layout */
+.footer-links {
   display: flex;
   flex-wrap: wrap;
   gap: 28px;
@@ -581,43 +803,65 @@ footer a:hover {
 
 
 /* Stats Section (Charts) */
-#graph-section-1 { /* Added a new ID for the main graph section wrapper */
-    padding: 60px 5%; /* Consistent padding with other sections */
+#graph-section-1 {
+    padding: 60px 5%;
     text-align: center;
-    background-color: #f9f9f9; /* Light background for this section */
+    background-color: var(--bg-color-secondary);
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 #graph-section-1 h2 {
-    color: #254E70;
+    color: var(--header-bg);
     margin-bottom: 40px;
     font-size: 2.2em;
 }
 
 .stats-container {
     display: flex;
-    justify-content: center; /* Center the two chart sections */
-    align-items: flex-start; /* Align items to the top if they have different heights */
-    gap: 30px; /* Increased gap between the two charts */
-    flex-wrap: wrap; /* Allow wrapping on smaller screens */
-    max-width: 1100px; /* Limit overall width for better layout */
-    margin: 0 auto; /* Center the container itself */
+    justify-content: center;
+    align-items: flex-start;
+    gap: 30px;
+    flex-wrap: wrap;
+    max-width: 1100px;
+    margin: 0 auto;
 }
 
 .stats-section {
-    flex: 1 1 48%; /* Adjusted flex basis for two columns with a small gap */
-    background: #fff;
+    flex: 1 1 48%;
+    background: var(--card-bg);
     border-radius: 12px;
-    box-shadow: 0 4px 16px rgba(50,50,80,0.08);
+    box-shadow: 0 4px 16px var(--card-shadow);
     padding: 28px;
     text-align: center;
-    min-width: 350px; /* Ensure charts have enough space even when wrapping */
-    box-sizing: border-box; /* Include padding in width calculation */
+    min-width: 350px;
+    box-sizing: border-box;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
-.stats-section h3 { /* Changed h2 to h3 for chart titles */
-    color: #254e70;
+.stats-section .chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 20px;
-    font-size: 1.8em; /* Slightly smaller for charts */
 }
+.stats-section h3 {
+    color: var(--header-bg);
+    margin: 0;
+    font-size: 1.8em;
+}
+.maximize-chart-btn {
+    background: none;
+    border: none;
+    color: var(--accent-color-primary);
+    font-size: 1.5em;
+    cursor: pointer;
+    padding: 5px;
+    transition: color 0.2s, transform 0.2s;
+}
+.maximize-chart-btn:hover {
+    color: var(--button-bg-primary);
+    transform: scale(1.1);
+}
+
 canvas {
     max-width: 100%;
     height: auto;
@@ -637,18 +881,19 @@ canvas {
 
 /* AI Chat Section - Specific Styling */
 .ai-chat-section {
-    background: #fff;
+    background: var(--card-bg);
     border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(50,50,80,0.07);
+    box-shadow: 0 2px 8px var(--card-shadow);
     margin: 32px auto 0 auto;
     padding: 24px;
     max-width: 660px;
     text-align: center;
-    display: flex; /* Make it a flex container */
-    flex-direction: column; /* Stack children vertically */
+    display: flex;
+    flex-direction: column;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 .ai-chat-section h2 {
-    color: #254E70;
+    color: var(--header-bg);
     margin-top: 0;
     margin-bottom: 20px;
     font-size: 2em;
@@ -656,51 +901,53 @@ canvas {
 
 #gemini-chat-box {
     display: flex;
-    gap: 10px; /* More space between input and button */
+    gap: 10px;
     justify-content: center;
-    align-items: flex-end; /* Align input and button bottoms */
-    margin-bottom: 15px; /* Space between input section and chat display */
+    align-items: flex-end;
+    margin-bottom: 15px;
 }
 #gemini-input {
-    flex-grow: 1; /* Allow textarea to fill space */
-    width: auto; /* Override fixed width */
-    padding: 10px 12px; /* More padding */
-    font-size: 1em; /* Adjusted font size */
-    border-radius: 8px; /* More rounded corners */
-    border: 1px solid #ccc;
-    resize: vertical; /* Allow vertical resizing */
-    min-height: 40px; /* Minimum height for better appearance */
-    max-height: 120px; /* Prevent it from getting too large */
-    box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    flex-grow: 1;
+    width: auto;
+    padding: 10px 12px;
+    font-size: 1em;
+    border-radius: 8px;
+    border: 1px solid var(--input-border);
+    resize: vertical;
+    min-height: 40px;
+    max-height: 120px;
+    box-shadow: inset 0 1px 3px var(--card-shadow);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease, color 0.3s ease;
+    background-color: var(--input-bg);
+    color: var(--text-color-primary);
 }
 #gemini-input:focus {
-    border-color: #3E93AA;
-    box-shadow: 0 0 0 3px rgba(62, 147, 170, 0.2);
+    border-color: var(--accent-color-primary);
+    box-shadow: 0 0 0 3px var(--story-write-textarea-focus-shadow);
     outline: none;
 }
 
 #gemini-chat-box button {
-    background: #254E70;
-    color: #fff;
+    background: var(--button-bg-primary);
+    color: var(--button-text-primary);
     border: none;
-    padding: 10px 22px; /* More padding for button */
+    padding: 10px 22px;
     border-radius: 8px;
-    font-size: 1.1em; /* Larger font */
+    font-size: 1.1em;
     cursor: pointer;
-    transition: background 0.2s, transform 0.1s;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    transition: background 0.2s, transform 0.1s, box-shadow 0.3s ease;
+    box-shadow: 0 3px 6px var(--card-shadow);
 }
 #gemini-chat-box button:hover {
-    background: #3E93AA;
+    background: var(--button-hover-primary);
     transform: translateY(-1px);
 }
 #gemini-chat-box button:active {
-    background: #1C3852;
+    background: var(--header-bg);
     transform: translateY(0);
 }
 #gemini-chat-box button:disabled {
-    background-color: #cccccc;
+    background-color: var(--input-border);
     cursor: not-allowed;
     box-shadow: none;
 }
@@ -708,69 +955,72 @@ canvas {
 
 /* Chat response container (the scrollable chat window) */
 #gemini-response {
-    margin-top: 15px; /* Space from input area */
+    margin-top: 15px;
     text-align: left;
-    min-height: 150px; /* Minimum height for chat window */
-    max-height: 400px; /* Maximum height before scrolling */
-    overflow-y: auto; /* Make it scrollable */
-    border: 1px solid #e0e0e0;
+    min-height: 150px;
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid var(--chat-border);
     border-radius: 8px;
-    padding: 15px; /* Padding inside the chat window */
-    background-color: #f9f9f9;
-    box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+    padding: 15px;
+    background-color: var(--chat-bg);
+    box-shadow: inset 0 1px 3px var(--card-shadow);
     display: flex;
-    flex-direction: column; /* Stack messages */
-    gap: 10px; /* Space between chat bubbles */
+    flex-direction: column;
+    gap: 10px;
+    transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 /* Individual Chat Message Styling */
 .chat-message {
     padding: 10px 15px;
-    border-radius: 18px; /* Rounded pill shape */
+    border-radius: 18px;
     line-height: 1.6;
-    max-width: 85%; /* Keep messages from spanning full width */
-    word-wrap: break-word; /* Ensure long words break */
-    box-shadow: 0 1px 3px rgba(0,0,0,0.08); /* Subtle shadow for bubbles */
-    clear: both; /* Ensures new messages don't float next to previous */
+    max-width: 85%;
+    word-wrap: break-word;
+    box-shadow: 0 1px 3px var(--card-shadow);
+    clear: both;
+    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .user-message {
-    background-color: #A7C7E7; /* User bubble color */
-    color: #222;
-    align-self: flex-end; /* Push user messages to the right */
-    margin-left: auto; /* Ensure it stays right-aligned */
-    border-bottom-right-radius: 5px; /* Flatten corner towards source */
+    background-color: var(--user-bubble-bg);
+    color: var(--user-bubble-text);
+    align-self: flex-end;
+    margin-left: auto;
+    border-bottom-right-radius: 5px;
 }
 
 .model-message {
-    background-color: #E4EAF2; /* AI bubble color */
-    color: #333;
-    align-self: flex-start; /* Push AI messages to the left */
-    margin-right: auto; /* Ensure it stays left-aligned */
-    border-bottom-left-radius: 5px; /* Flatten corner towards source */
+    background-color: var(--model-bubble-bg);
+    color: var(--model-bubble-text);
+    align-self: flex-start;
+    margin-right: auto;
+    border-bottom-left-radius: 5px;
 }
 
-.error-message {
-    background-color: #ffe0e0; /* Light red for errors */
-    color: #cc0000;
-    border: 1px solid #ffb3b3;
+/* Error message styling within chat area */
+.chat-message.error-message-style { /* New class for chat-appended errors */
+    background-color: var(--error-bg);
+    color: var(--error-text);
+    border: 1px solid var(--error-border);
     text-align: center;
-    align-self: center; /* Center error messages */
+    align-self: center;
     font-weight: bold;
-    border-radius: 8px; /* Less rounded for errors */
+    border-radius: 8px;
 }
 
 /* Markdown elements within messages (important for AI response formatting) */
 .model-message p:last-child {
-    margin-bottom: 0; /* Remove extra margin from last paragraph in a message */
+    margin-bottom: 0;
 }
 
 .model-message h1, .model-message h2, .model-message h3, .model-message h4, .model-message h5, .model-message h6 {
-    color: #254E70; /* Darker color for headings within AI responses */
+    color: var(--header-bg); /* Headings within model messages */
     margin-top: 15px;
     margin-bottom: 10px;
     padding-bottom: 0;
-    border-bottom: none; /* No underline for headings in chat bubbles */
+    border-bottom: none;
     font-size: 1.3em;
     line-height: 1.3;
 }
@@ -789,28 +1039,31 @@ canvas {
     margin-bottom: 5px;
 }
 
-.model-message pre { /* Code blocks */
-    background-color: #f0f0f0;
+.model-message pre {
+    background-color: var(--code-block-bg);
     padding: 10px;
     border-radius: 6px;
-    overflow-x: auto; /* Enable horizontal scroll for long code lines */
+    overflow-x: auto;
     font-family: 'Consolas', 'Monaco', monospace;
     font-size: 0.85em;
-    border: 1px solid #e0e0e0;
+    border: 1px solid var(--chat-border);
     line-height: 1.3;
     margin-top: 10px;
     margin-bottom: 10px;
-    white-space: pre-wrap; /* Ensure preformatted text wraps */
-    word-wrap: break-word; /* Break long words in preformatted blocks */
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    color: var(--text-color-primary);
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
 }
 
-.model-message code { /* Inline code */
+.model-message code {
     font-family: 'Consolas', 'Monaco', monospace;
-    background-color: #e6e6e6;
+    background-color: var(--inline-code-bg);
     padding: 1px 4px;
     border-radius: 3px;
-    color: #c7254e; /* Distinct color for inline code */
+    color: var(--inline-code-text);
     font-size: 0.9em;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Loading Indicator Styling */
@@ -819,7 +1072,7 @@ canvas {
     align-items: center;
     justify-content: center;
     margin-top: 15px;
-    color: #254E70;
+    color: var(--header-bg); /* Use header-bg for loading text/dots */
     font-weight: bold;
     flex-shrink: 0;
 }
@@ -829,7 +1082,7 @@ canvas {
     width: 12px;
     height: 12px;
     border-radius: 50%;
-    background-color: #254E70;
+    background-color: var(--header-bg); /* Use header-bg for loading dots */
     margin: 0 5px;
     animation: bounce 0.6s infinite alternate;
 }
@@ -851,21 +1104,22 @@ canvas {
     }
 }
 
-/* Error Display Styling */
+/* Error Display Styling (for the fixed error box below chat) */
 .error-display {
     margin-top: 15px;
     padding: 12px;
-    background-color: #ffe0e0; /* Light red background */
-    border: 1px solid #ffb3b3; /* Red border */
+    background-color: var(--error-bg);
+    border: 1px solid var(--error-border);
     border-radius: 8px;
-    color: #cc0000; /* Darker red text */
+    color: var(--error-text);
     font-weight: bold;
     flex-shrink: 0;
     text-align: center;
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
 }
 
 .error-display #errorMessage {
-    word-break: break-all; /* Break long error messages */
+    word-break: break-all;
 }
 
 /* Utility Class */
@@ -874,120 +1128,122 @@ canvas {
 }
 
 /* Quiz Page Specific Styles (for index2.html, but also used by summary in index3.html) */
-.quiz-page-container { /* New container for the entire quiz page content */
-    max-width: 800px; /* Max width for the quiz content */
-    margin: 40px auto; /* Center it and add vertical space */
-    padding: 0 20px; /* Add padding for smaller screens */
+.quiz-page-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
 }
 
-.quiz-header { /* Style for the new quiz header */
+.quiz-header {
     text-align: center;
     margin-bottom: 40px;
     padding: 20px;
-    background: linear-gradient(90deg, #c2e9fb 0%, #a1c4fd 100%); /* Light gradient background */
+    background: linear-gradient(90deg, var(--quiz-header-gradient-start) 0%, var(--quiz-header-gradient-end) 100%);
     border-radius: 15px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-    color: #254E70;
+    box-shadow: 0 8px 20px var(--card-shadow);
+    color: var(--header-bg);
+    transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .quiz-header h1 {
     font-size: 2.5em;
     margin-bottom: 15px;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.05); /* Subtle text shadow */
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
 }
 
 .quiz-header p {
     font-size: 1.1em;
     line-height: 1.6;
-    color: #1C3852;
+    color: var(--header-bg); /* This text is part of the header, so it matches header bg */
     max-width: 600px;
     margin: 0 auto;
 }
 
-#quiz { /* This ID is for the main container in index2.html */
-    /* Removed max-width and padding as quiz-page-container handles it */
-    margin: 0 auto; /* Center within its parent */
+#quiz {
+    margin: 0 auto;
 }
 
-.quiz-card { /* Main card style for quiz questions in index2.html */
-    background: #fff;
-    box-shadow: 0 8px 20px rgba(50,50,80,0.1); /* Stronger shadow */
-    border-radius: 15px; /* More rounded corners */
-    padding: 35px; /* Increased padding */
-    margin-bottom: 30px; /* More space below card */
+.quiz-card {
+    background: var(--card-bg);
+    box-shadow: 0 8px 20px var(--card-shadow);
+    border-radius: 15px;
+    padding: 35px;
+    margin-bottom: 30px;
     text-align: center;
-    border: 1px solid #e0e0e0; /* Subtle border */
-    position: relative; /* For question number positioning */
+    border: 1px solid var(--card-border);
+    position: relative;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
-.question-number { /* New style for question number */
+.question-number {
     position: absolute;
-    top: -15px; /* Position above the card */
+    top: -20px;
     left: 50%;
     transform: translateX(-50%);
-    background: #3E93AA; /* Highlight color */
-    color: #fff;
+    background: var(--accent-color-primary);
+    color: var(--header-text);
     padding: 8px 15px;
-    border-radius: 20px; /* Pill shape */
+    border-radius: 20px;
     font-weight: bold;
     font-size: 1.1em;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-    z-index: 1; /* Ensure it's above the card */
+    box-shadow: 0 4px 10px var(--card-shadow);
+    z-index: 1;
+    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.quiz-card h2 { /* Question text */
+.quiz-card h2 {
     font-size: 1.8em;
-    color: #254E70;
-    margin-bottom: 30px; /* More space below question */
+    color: var(--header-bg); /* Quiz question text */
+    margin-bottom: 30px;
     line-height: 1.4;
 }
 
 .quiz-options {
     display: grid;
     margin: 20px 0;
-    gap: 15px; /* More space between buttons */
+    gap: 15px;
 }
 
 .quiz-options button {
-    background: #e4eaf2;
-    color: #222;
+    background: var(--quiz-option-bg);
+    color: var(--text-color-primary);
     border: none;
-    padding: 15px 20px; /* Larger buttons */
-    border-radius: 10px; /* More rounded */
-    font-size: 1.1em; /* Larger font */
+    padding: 15px 20px;
+    border-radius: 10px;
+    font-size: 1.1em;
     cursor: pointer;
-    transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08); /* Subtle button shadow */
+    transition: background 0.2s, transform 0.1s, box-shadow 0.2s, color 0.3s ease;
+    box-shadow: 0 2px 8px var(--card-shadow);
 }
 .quiz-options button.selected, .quiz-options button:hover {
-    background: #A7C7E7; /* Lighter blue on hover/selected */
-    color: #222;
+    background: var(--quiz-option-hover-selected);
+    color: var(--text-color-primary);
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15); /* More pronounced shadow on hover/selected */
+    box-shadow: 0 4px 12px var(--card-shadow);
 }
 .quiz-options button:active {
     transform: translateY(0);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    box-shadow: 0 2px 8px var(--card-shadow);
 }
 
 .quiz-nav-buttons {
     display: flex;
     justify-content: space-between;
-    margin-top: 30px; /* More space above navigation buttons */
+    margin-top: 30px;
 }
 .quiz-nav-buttons button {
-    padding: 12px 25px; /* Larger nav buttons */
-    border-radius: 8px; /* More rounded */
+    padding: 12px 25px;
+    border-radius: 8px;
     border: none;
     cursor: pointer;
-    background: #254E70;
-    color: white;
+    background: var(--button-bg-primary);
+    color: var(--button-text-primary);
     font-size: 1.1em;
-    transition: background 0.2s, transform 0.1s;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+    transition: background 0.2s, transform 0.1s, box-shadow 0.3s ease;
+    box-shadow: 0 3px 8px var(--card-shadow);
 }
 .quiz-nav-buttons button:hover:not(:disabled) {
-    background: #3E93AA;
+    background: var(--button-hover-primary);
     transform: translateY(-1px);
 }
 .quiz-nav-buttons button:disabled {
@@ -996,26 +1252,26 @@ canvas {
     box-shadow: none;
 }
 .quiz-submit {
-    background: #47B39C; /* Green for submit */
+    background: var(--quiz-submit-bg);
 }
 .quiz-submit:hover:not(:disabled) {
-    background: #388e7b; /* Darker green on hover */
+    background: var(--quiz-submit-hover);
 }
 
-/* Quiz Summary Styles (for index3.html) */
-.summary-section-wrapper { /* This is the main container for the summary in index3.html */
-    max-width: 700px; /* Limit width for better readability */
-    margin: 40px auto; /* Center it and add vertical space */
-    padding: 30px; /* Internal padding */
-    background-color: #ffffff; /* White background for a card effect */
-    box-shadow: 0 8px 20px rgba(0,0,0,0.1); /* More pronounced shadow */
-    border-radius: 15px; /* More rounded corners */
-    text-align: center; /* Center content within the wrapper */
-    display: none; /* Hidden by default, shown by script.js if quiz completed */
+/* Quiz Summary Styles */
+.summary-section-wrapper {
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: var(--card-bg);
+    box-shadow: 0 8px 20px var(--card-shadow);
+    border-radius: 15px;
+    text-align: center;
+    display: none;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.summary-card { /* This class is applied to the content INSIDE summary-section-wrapper by script.js */
-    /* Remove redundant styles as the wrapper now handles the main card look */
+.summary-card {
     margin-bottom: 0;
     padding: 0;
     box-shadow: none;
@@ -1023,123 +1279,131 @@ canvas {
 }
 
 .summary-card h3 {
-    margin-top: 0;
-    color: #254E70;
-    font-size: 1.8em; /* Slightly larger heading for prominence */
+    color: var(--header-bg);
+    font-size: 1.8em;
     margin-bottom: 15px;
 }
-.summary-status { /* Unified style for status text */
+.summary-status {
     font-weight: bold;
-    font-size: 1.4em; /* Slightly larger for emphasis */
-    margin: 20px 0; /* More vertical space */
-    padding: 10px 15px; /* Padding for the status text itself */
-    border-radius: 8px; /* Rounded corners for the status box */
-    display: inline-block; /* Allows padding and border to wrap content */
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* Subtle shadow for status box */
+    font-size: 1.4em;
+    margin: 20px 0;
+    padding: 10px 15px;
+    border-radius: 8px;
+    display: inline-block;
+    box-shadow: 0 2px 5px var(--card-shadow);
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
-/* Specific colors for status categories */
 .summary-status.good {
-    color: #155724; /* Dark green text */
-    background-color: #d4edda; /* Light green background */
-    border: 1px solid #c3e6cb;
+    color: var(--summary-status-good-text);
+    background-color: var(--summary-status-good-bg);
+    border: 1px solid var(--summary-status-good-border);
 }
 .summary-status.average {
-    color: #856404; /* Dark yellow/orange text */
-    background-color: #fff3cd; /* Light yellow background */
-    border: 1px solid #ffeeba;
+    color: var(--summary-status-average-text);
+    background-color: var(--summary-status-average-bg);
+    border: 1px solid var(--summary-status-average-border);
 }
 .summary-status.bad {
-    color: #721c24; /* Dark red text */
-    background-color: #f8d7da; /* Light red background */
-    border: 1px solid #f5c6cb;
+    color: var(--summary-status-bad-text);
+    background-color: var(--summary-status-bad-bg);
+    border: 1px solid var(--summary-status-bad-border);
 }
 .summary-status.medium {
-    color: #004085; /* Dark blue text */
-    background-color: #cce5ff; /* Light blue background */
-    border: 1px solid #b8daff;
+    color: var(--summary-status-medium-text);
+    background-color: var(--summary-status-medium-bg);
+    border: 1px solid var(--summary-status-medium-border);
 }
 
 .summary-card p {
-    margin-bottom: 15px; /* Increased space below paragraphs */
-    font-size: 1.1em; /* Slightly larger text for readability */
-    line-height: 1.7; /* Increased line height for better readability */
+    margin-bottom: 15px;
+    font-size: 1.1em;
+    line-height: 1.7;
+    color: var(--text-color-primary);
 }
 .summary-card ul {
-    list-style-position: inside; /* Keep bullet points inside the list item */
-    padding-left: 0; /* Remove default padding */
-    margin-bottom: 20px; /* More space below lists */
-    text-align: left; /* Align list items to the left */
-    max-width: 550px; /* Slightly wider lists */
+    list-style-position: inside;
+    padding-left: 0;
+    margin-bottom: 20px;
+    text-align: left;
+    max-width: 550px;
     margin-left: auto;
     margin-right: auto;
-    border-top: 1px solid #e4eaf2; /* Separator for suggestions */
-    padding-top: 15px; /* Space above list content */
+    border-top: 1px solid var(--card-border);
+    padding-top: 15px;
+    transition: border-color 0.3s ease;
 }
 .summary-card ul li {
-    margin-bottom: 8px; /* More space between list items */
+    margin-bottom: 8px;
     font-size: 1em;
+    color: var(--text-color-primary);
 }
-.summary-card .general-tips-section { /* New class for the general tips section */
-    margin-top: 25px; /* More space above general tips */
-    border-top: 1px solid #e4eaf2; /* Separator for general tips */
-    padding-top: 20px; /* Space above general tips content */
-    text-align: left; /* Align general tips to the left */
-    max-width: 550px; /* Match list width */
+.summary-card .general-tips-section {
+    margin-top: 25px;
+    border-top: 1px solid var(--card-border);
+    padding-top: 20px;
+    text-align: left;
+    max-width: 550px;
     margin-left: auto;
     margin-right: auto;
+    transition: border-color 0.3s ease;
 }
 .summary-card .general-tips-section strong {
-    display: block; /* Make "General Tips" a block element */
-    margin-bottom: 10px; /* Space below "General Tips" heading */
-    font-size: 1.1em; /* Slightly larger font for heading */
-    text-align: center; /* Center the "General Tips" heading */
+    display: block;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+    text-align: center;
+    color: var(--header-bg);
 }
 
-.summary-card .retake { /* Retake button within summary */
-    margin-top: 30px; /* More space above the retake button */
-    padding: 14px 35px; /* Larger button */
+.summary-card .retake {
+    margin-top: 30px;
+    padding: 14px 35px;
     font-size: 1.2em;
 }
 #summary-table {
     width: 100%;
-    margin: 18px auto 25px auto; /* More space below table */
+    margin: 18px auto 25px auto;
     border-collapse: collapse;
-    max-width: 450px; /* Slightly wider table */
-    border: 1px solid #ddd; /* Subtle border around the table */
-    border-radius: 8px; /* Rounded corners for the table */
-    overflow: hidden; /* Ensures rounded corners apply to content */
+    max-width: 450px;
+    border: 1px solid var(--table-border);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: border-color 0.3s ease;
 }
 #summary-table th, #summary-table td {
-    border: 1px solid #eee; /* Lighter borders for cells */
-    padding: 10px 12px; /* More padding in cells */
+    border: 1px solid var(--card-border);
+    padding: 10px 12px;
     font-weight: normal;
     text-align: center;
+    transition: border-color 0.3s ease;
 }
 #summary-table th {
-    background: #eef3f7; /* Lighter background for headers */
-    color: #254E70;
-    font-weight: bold; /* Bold headers */
+    background: var(--table-header-bg);
+    color: var(--header-bg);
+    font-weight: bold;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 #summary-table tr:nth-child(even) {
-    background-color: #f9f9f9; /* Zebra striping for rows */
+    background-color: var(--table-row-even-bg);
+    transition: background-color 0.3s ease;
 }
 
 
-/* Modal Styles */
+/* Modal Styles for Stories and Disorders */
 .modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.7); /* Dark overlay */
+    background-color: var(--modal-overlay-bg);
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1001; /* Above everything else */
-    opacity: 0; /* Start hidden for animation */
-    visibility: hidden; /* Hide completely for animation */
-    transition: opacity 0.3s ease, visibility 0.3s ease;
+    z-index: 1001;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease, background-color 0.3s ease;
 }
 
 .modal-overlay.hidden {
@@ -1153,27 +1417,27 @@ canvas {
 }
 
 .modal-content {
-    background-color: #fff;
+    background-color: var(--modal-bg);
     padding: 30px;
     border-radius: 15px;
-    max-width: 700px; /* Max width for modal content */
-    width: 90%; /* Responsive width */
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    max-width: 700px;
+    width: 90%;
+    box-shadow: 0 10px 30px var(--modal-shadow);
     position: relative;
-    max-height: 90vh; /* Max height to allow scrolling for long stories */
-    overflow-y: auto; /* Enable scrolling within the modal content */
-    transform: translateY(20px); /* Start slightly below for animation */
-    opacity: 0; /* Start hidden for animation */
-    transition: transform 0.3s ease, opacity 0.3s ease;
+    max-height: 90vh;
+    overflow-y: auto;
+    transform: translateY(20px);
+    opacity: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .modal-overlay:not(.hidden) .modal-content {
-    transform: translateY(0); /* Slide up into view */
+    transform: translateY(0);
     opacity: 1;
 }
 
 .modal-content h3 {
-    color: #254E70;
+    color: var(--header-bg);
     font-size: 1.8em;
     margin-top: 0;
     margin-bottom: 20px;
@@ -1183,16 +1447,16 @@ canvas {
 .modal-content p {
     font-size: 1.1em;
     line-height: 1.8;
-    color: #333;
+    color: var(--text-color-primary);
     margin-bottom: 20px;
-    text-align: justify; /* Justify text for better readability */
+    text-align: justify;
 }
 
 .modal-content span#modalStoryAuthor {
     display: block;
     text-align: right;
     font-weight: bold;
-    color: #3E93AA;
+    color: var(--accent-color-primary);
     font-size: 1em;
     margin-top: 15px;
 }
@@ -1203,14 +1467,46 @@ canvas {
     right: 20px;
     font-size: 2.5em;
     font-weight: bold;
-    color: #888;
+    color: var(--close-button-color);
     cursor: pointer;
     transition: color 0.2s;
 }
 
 .close-button:hover,
 .close-button:focus {
-    color: #555;
+    color: var(--close-button-hover);
+}
+
+/* NEW: Styles for Chart Modal */
+.chart-modal-content {
+    max-width: 95%;
+    width: 90%;
+    max-height: 90vh;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.chart-modal-content h3 {
+    margin-bottom: 15px;
+    font-size: 2em;
+}
+
+.chart-canvas-container {
+    width: 100%;
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 300px;
+}
+
+.chart-modal-content canvas {
+    max-width: 100%;
+    max-height: 100%;
+    height: auto !important;
+    width: auto !important;
 }
 
 
@@ -1219,52 +1515,52 @@ canvas {
     .nav-toggle-label {
         display: block;
         cursor: pointer;
-        order: 1; /* Puts hamburger on the left */
+        order: 1;
         padding: 10px;
         position: relative;
-        z-index: 11; /* Above nav links when open */
+        z-index: 11;
     }
 
     .nav-toggle-label span {
         display: block;
         width: 25px;
         height: 3px;
-        background-color: #fff;
+        background-color: var(--header-text);
         margin: 5px 0;
-        transition: transform 0.3s ease, opacity 0.3s ease;
+        transition: transform 0.3s ease, opacity 0.3s ease, background-color 0.3s ease;
     }
 
     .nav-links {
         position: absolute;
-        top: 60px; /* Below navbar */
+        top: 60px;
         left: 0;
         width: 100%;
-        background: #254E70;
+        background: var(--header-bg);
         flex-direction: column;
         height: 0;
         overflow: hidden;
-        transition: height 0.3s ease, padding 0.3s ease;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        transition: height 0.3s ease, padding 0.3s ease, background-color 0.3s ease;
+        box-shadow: 0 2px 5px var(--card-shadow);
         z-index: 9;
     }
 
     .nav-links.active {
-        height: auto; /* Adjust based on content */
-        max-height: 300px; /* Max height to prevent overflow issues */
-        padding-bottom: 20px; /* Add some padding at the bottom when open */
+        height: auto;
+        max-height: 300px;
+        padding-bottom: 20px;
     }
 
     .nav-links li {
         margin: 0;
-        text-align: left; /* Align text to the left for mobile menu items */
+        text-align: left;
         width: 100%;
     }
 
     .nav-links a {
-        padding: 12px 20px; /* More padding for mobile clickable area */
-        border-bottom: 1px solid rgba(255,255,255,0.1); /* Separator */
-        justify-content: flex-start; /* Align icon and text to the start */
-        gap: 15px; /* Increased gap between icon and text for mobile */
+        padding: 12px 20px;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        justify-content: flex-start;
+        gap: 15px;
     }
     .nav-links li:last-child a {
         border-bottom: none;
@@ -1272,7 +1568,7 @@ canvas {
 
     .nav-toggle:checked ~ .nav-links {
         height: auto;
-        max-height: 300px; /* Or specific height */
+        max-height: 300px;
         padding-bottom: 20px;
     }
 
@@ -1288,10 +1584,20 @@ canvas {
     }
 
     .navbar {
-        justify-content: space-between; /* Space out logo and hamburger */
+        justify-content: space-between;
     }
     .nav-left {
-        order: 2; /* Put logo on the right of hamburger */
+        order: 2;
+    }
+
+    .dark-mode-toggle-container {
+        width: 100%; /* Make toggle container full width in mobile menu */
+        text-align: center;
+        padding: 10px 0;
+        border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    .dark-mode-toggle {
+        margin: 0; /* Remove left margin in mobile menu */
     }
 
 
@@ -1305,10 +1611,10 @@ canvas {
         font-size: 1em;
     }
 
-    #why-mental-health, #quick-explore, #info, #stories { /* Added new sections */
+    #why-mental-health, #quick-explore, #info, #stories {
         padding: 30px 5%;
     }
-    .why-points, .quick-links-grid { /* Responsive for new grids */
+    .why-points, .quick-links-grid {
         flex-direction: column;
         gap: 20px;
     }
@@ -1318,7 +1624,7 @@ canvas {
     }
 
     .disorder-card, .story-card {
-        flex: 1 1 100%; /* Stack cards vertically on small screens */
+        flex: 1 1 100%;
         max-width: 100%;
         margin: 8px 0;
     }
@@ -1329,12 +1635,23 @@ canvas {
     }
     .stats-section {
         flex: 1 1 auto;
-        min-width: unset; /* Remove min-width to allow full collapse */
+        min-width: unset;
         padding: 20px;
+    }
+    .stats-section .chart-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .stats-section h3 {
+        margin-bottom: 10px;
+    }
+    .maximize-chart-btn {
+        align-self: flex-end;
     }
     canvas {
         width: 100% !important;
-        height: 250px !important; /* Adjust height for smaller screens */
+        height: auto !important;
+        min-height: 200px;
     }
     .ai-chat-section {
         padding: 20px;
@@ -1349,13 +1666,13 @@ canvas {
         width: auto;
     }
     #gemini-chat-box button {
-        width: 100%; /* Full width button */
+        width: 100%;
     }
 
     /* Modal responsive adjustments */
     .modal-content {
         padding: 20px;
-        width: 95%; /* Make modal slightly wider on small screens */
+        width: 95%;
     }
     .modal-content h3 {
         font-size: 1.5em;
@@ -1368,6 +1685,20 @@ canvas {
         top: 10px;
         right: 15px;
     }
+
+    /* Chart Modal Responsive Adjustments */
+    .chart-modal-content {
+        width: 95%;
+        max-width: 95%;
+        padding: 15px;
+    }
+    .chart-modal-content h3 {
+        font-size: 1.6em;
+    }
+    .chart-canvas-container {
+        min-height: 250px;
+    }
+
 
     /* Write Your Story responsive adjustments */
     .write-story {
@@ -1389,7 +1720,7 @@ canvas {
 
     /* Quiz specific responsive adjustments */
     .quiz-page-container {
-        padding: 0 15px; /* Adjust padding for smaller screens */
+        padding: 0 15px;
     }
     .quiz-header {
         padding: 15px;
@@ -1414,13 +1745,46 @@ canvas {
         font-size: 1em;
     }
     .quiz-nav-buttons {
-        flex-direction: column; /* Stack buttons vertically */
-        gap: 10px; /* Space between stacked buttons */
+        flex-direction: column;
+        gap: 10px;
         margin-top: 20px;
     }
     .quiz-nav-buttons button {
-        width: 100%; /* Full width buttons */
+        width: 100%;
         padding: 12px 20px;
         font-size: 1em;
+    }
+}
+
+/* Specific adjustments for smaller mobile screens (e.g., < 480px) */
+@media (max-width: 480px) {
+    .stats-section {
+        padding: 15px;
+    }
+    .stats-section h3 {
+        font-size: 1.5em;
+    }
+    .stats-section canvas {
+        font-size: 0.7em;
+    }
+    .chart-modal-content h3 {
+        font-size: 1.4em;
+    }
+    .chart-canvas-container {
+        min-height: 200px;
+    }
+
+    /* Quiz specific adjustments for very small screens */
+    .quiz-card h2 {
+        font-size: 1.3em;
+    }
+    .quiz-options button {
+        font-size: 0.9em;
+        padding: 10px 12px;
+    }
+    .question-number {
+        font-size: 0.9em;
+        padding: 6px 12px;
+        top: -15px;
     }
 }
